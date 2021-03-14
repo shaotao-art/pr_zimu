@@ -1,0 +1,12 @@
+    def req(self):
+        url=self.url_input.text()
+        header={ 'User-Agent' :'Mozilla/5.0 (X11; Linux x86_64; rv:86.0) Gecko/20100101 Firefox/86.0'}
+        r=requests.get(url=url,headers=header)
+        self.ret_msg.setText(r.text)
+
+
+
+        self.add.clicked.connect(self.headers.insertRow(1))
+        self.delete_2.clicked.connect(self.headers.removeRow(1))
+        self.send.clicked.connect(self.req)
+
