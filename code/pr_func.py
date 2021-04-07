@@ -10,7 +10,7 @@ from PIL import Image, ImageDraw, ImageFont
 '''
 '''
 用户会遇到的问题：
-    1，字幕超过图片的大小
+    1，当字幕超过图片的大小时
        在done. txt文档中对用户进行提示  使其更改
     2，更丰富的选择：
         如字体的选择与大小的选择
@@ -48,41 +48,40 @@ def split_sentence(path):
     print('-----查看是否每一行为您想要展示的字幕')
     print('-----并查看其中的提示信息，进行适当的修改后再次打开此程序。')
     return '/home/starfish/桌面/pr_zimu/docs/done.txt'
-#
-#
-# def check(path):
-#     with open(path, 'r+', encoding='utf-8')as f:
-#         f.write('\n' * 2)
-#         lines = list(f.readlines())
-#         for each_line in lines:
-#             #img = Image.new(mode='RGB', size=(1920, 1080), color=(0, 0, 0))   # 此为生成黑色背景的图片
-#             img = Image.new(mode='RGBA', size=(1920, 1080))                    # 此为生成透明背景的图片
-#             draw = ImageDraw.Draw(img)
-#             ttf_font = ImageFont.truetype('simhei.ttf', 45)  # 字体大小
-#             (zimu_x, zimu_y) = draw.textsize(text=each_line, font=ttf_font)
-#             if zimu_x > 980:
-#                 f.write(each_line + '-------此句太长了，字幕不好加，请把它修改一下' + '\n')
-#         f.write('\n' * 2 + '#########修改好这个文件后不要忘记把我们这些没用的语句删掉呦')
-#
-#
-# '''
-# 因为要使字幕居中，我们设置
-#  1，空白字幕图片的大小为1920*1080
-#  2. 文字离字幕图片底边的大小恒定
-#  3. 获得文字的大小 计算xy坐标使其居中
-# '''
-#
-#
-# def write_text():
-#     with open('done.txt', encoding='utf-8')as f:
-#         lines = list(f.readlines())
-#         for each_line in lines:
-#             img = Image.new(mode='RGBA', size=(1920, 1080))
-#             draw = ImageDraw.Draw(img)
-#             ttf_font = ImageFont.truetype('simhei.ttf', 45)  # 字体大小
-#             (zimu_x, zimu_y) = draw.textsize(text=each_line, font=ttf_font)
-#             draw.text(xy=((1980 - zimu_x) / 2 - 10, 1080 - zimu_y - 90), text=each_line, fill=(255, 255, 255),
-#                       font=ttf_font)  # 文字位置，内容，字体
-#             img.save('{}.png'.format(lines.index(each_line)))
-#             print('--请等待正在生成第{}张图片'.format(lines.index(each_line)))
-#
+
+
+
+def check(path):
+    with open(path, 'r+', encoding='utf-8')as f:
+        f.write('\n' * 2)
+        lines = list(f.readlines())
+        for each_line in lines:
+            #img = Image.new(mode='RGB', size=(1920, 1080), color=(0, 0, 0))   # 此为生成黑色背景的图片
+            img = Image.new(mode='RGBA', size=(1920, 1080))                    # 此为生成透明背景的图片
+            draw = ImageDraw.Draw(img)
+            ttf_font = ImageFont.truetype('simhei.ttf', 45)  # 字体大小
+            (zimu_x, zimu_y) = draw.textsize(text=each_line, font=ttf_font)
+            if zimu_x > 980:
+                f.write(each_line + '-------此句太长了，字幕不好加，请把它修改一下' + '\n')
+        f.write('\n' * 2 + '#########修改好这个文件后不要忘记把我们这些没用的语句删掉呦')
+
+
+'''
+因为要使字幕居中，我们设置
+ 1，空白字幕图片的大小为1920*1080
+ 2. 文字离字幕图片底边的大小恒定
+ 3. 获得文字的大小 计算xy坐标使其居中
+'''
+def write_text():
+    with open('done.txt', encoding='utf-8')as f:
+        lines = list(f.readlines())
+        for each_line in lines:
+            img = Image.new(mode='RGBA', size=(1920, 1080))
+            draw = ImageDraw.Draw(img)
+            ttf_font = ImageFont.truetype('simhei.ttf', 45)  # 字体大小
+            (zimu_x, zimu_y) = draw.textsize(text=each_line, font=ttf_font)
+            draw.text(xy=((1980 - zimu_x) / 2 - 10, 1080 - zimu_y - 90), text=each_line, fill=(255, 255, 255),
+                      font=ttf_font)  # 文字位置，内容，字体
+            img.save('{}.png'.format(lines.index(each_line)))
+            print('--请等待正在生成第{}张图片'.format(lines.index(each_line)))
+
