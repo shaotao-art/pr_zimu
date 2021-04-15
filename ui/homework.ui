@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>614</width>
-    <height>529</height>
+    <width>2358</width>
+    <height>1697</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,382 +17,266 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLineEdit{
-	background:rgba(255,3,0,0);
-	border-radius:100px;
-	color: rgb(255, 255, 255);
-}</string>
+   <string notr="true"/>
   </property>
   <property name="unifiedTitleAndToolBarOnMac">
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLineEdit" name="preview_text">
+   <widget class="QPushButton" name="choose_txt">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>200</y>
-      <width>371</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>22</pointsize>
-      <weight>75</weight>
-      <bold>true</bold>
-     </font>
-    </property>
-    <property name="autoFillBackground">
-     <bool>false</bool>
-    </property>
-    <property name="styleSheet">
-     <string notr="true"/>
-    </property>
-    <property name="text">
-     <string>诉讼官司的嘎的</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignCenter</set>
-    </property>
-    <property name="dragEnabled">
-     <bool>true</bool>
-    </property>
-    <property name="placeholderText">
-     <string>请在此输入您的内容</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="file">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>88</width>
-      <height>34</height>
+      <x>40</x>
+      <y>30</y>
+      <width>251</width>
+      <height>61</height>
      </rect>
     </property>
     <property name="text">
      <string>导入文本文件</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QLabel" name="pic_show">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>60</y>
-      <width>601</width>
+      <x>22</x>
+      <y>62</y>
+      <width>16</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="Phonon::VideoPlayer" name="videoPlayer">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>130</y>
+      <width>1600</width>
+      <height>900</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="choose_video">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>30</y>
+      <width>251</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>导入视频文件</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>1660</x>
+      <y>150</y>
+      <width>851</width>
       <height>421</height>
      </rect>
     </property>
-    <layout class="QHBoxLayout" name="horizontalLayout_12">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_6" stretch="2,1">
-       <item>
-        <widget class="QLabel" name="pic_show">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="styleSheet">
-          <string notr="true"/>
-         </property>
-         <property name="text">
-          <string/>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QTabWidget" name="tabWidget">
-         <property name="currentIndex">
-          <number>1</number>
-         </property>
-         <widget class="QWidget" name="tab">
-          <attribute name="title">
-           <string>字体设置</string>
-          </attribute>
-          <widget class="QWidget" name="">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>0</y>
-             <width>281</width>
-             <height>111</height>
-            </rect>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_10">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,0,0">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="100,1">
-                <item>
-                 <widget class="QLabel" name="label_2">
-                  <property name="text">
-                   <string>字体</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFontComboBox" name="pic_font"/>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="1,1">
-                <item>
-                 <widget class="QLabel" name="label">
-                  <property name="text">
-                   <string>字体大小</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QSpinBox" name="pick_font_size">
-                  <property name="value">
-                   <number>10</number>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="1,1">
-                <item>
-                 <widget class="QLabel" name="label_3">
-                  <property name="text">
-                   <string>颜色选择</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="pick_color">
-                  <property name="text">
-                   <string>选择颜色</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="Line" name="line">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_5" stretch="0,0,0,0">
-              <item>
-               <widget class="QLabel" name="label_4">
-                <property name="text">
-                 <string>效果</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox">
-                <property name="text">
-                 <string>加粗</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_2">
-                <property name="text">
-                 <string>倾斜</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QCheckBox" name="checkBox_3">
-                <property name="text">
-                 <string>下划线</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-         <widget class="QWidget" name="tab_2">
-          <attribute name="title">
-           <string>文字位置</string>
-          </attribute>
-          <widget class="QWidget" name="">
-           <property name="geometry">
-            <rect>
-             <x>0</x>
-             <y>20</y>
-             <width>391</width>
-             <height>80</height>
-            </rect>
-           </property>
-           <layout class="QHBoxLayout" name="horizontalLayout_11">
-            <item>
-             <layout class="QVBoxLayout" name="verticalLayout_4">
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="1,1,1">
-                <item>
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="to_up">
-                  <property name="text">
-                   <string>向上</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,1,1">
-                <item>
-                 <widget class="QPushButton" name="to_left">
-                  <property name="text">
-                   <string>向左</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>60</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="to_right">
-                  <property name="text">
-                   <string>向右</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </item>
-              <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="1,1,1">
-                <item>
-                 <spacer name="horizontalSpacer_4">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="to_down">
-                  <property name="text">
-                   <string>向下</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_5">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </item>
-             </layout>
-            </item>
-            <item>
-             <widget class="Line" name="line_2">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <layout class="QHBoxLayout" name="horizontalLayout_6">
-              <item>
-               <widget class="QPushButton" name="pushButton">
-                <property name="text">
-                 <string>居左</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_3">
-                <property name="text">
-                 <string>居右</string>
-                </property>
-               </widget>
-              </item>
-              <item>
-               <widget class="QPushButton" name="pushButton_2">
-                <property name="text">
-                 <string>居中</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-           </layout>
-          </widget>
-         </widget>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <widget class="QTextEdit" name="text_edit"/>
-     </item>
-    </layout>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QPushButton" name="style_PB">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>40</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>预览</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="english_PB">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>150</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>添加英文字幕</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="start_working">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>250</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>开始生成字幕</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>360</y>
+       <width>311</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>自动定位时间点</string>
+     </property>
+    </widget>
    </widget>
-   <zorder>tabWidget</zorder>
+   <widget class="QFrame" name="frame_2">
+    <property name="geometry">
+     <rect>
+      <x>350</x>
+      <y>1030</y>
+      <width>1101</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="Phonon::SeekSlider" name="seekSlider">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>10</y>
+       <width>1031</width>
+       <height>41</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="Phonon::VolumeSlider" name="volumeSlider">
+     <property name="geometry">
+      <rect>
+       <x>840</x>
+       <y>40</y>
+       <width>231</width>
+       <height>121</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="play_or_pause_PB">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>播放/暂停</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="recode_time">
+     <property name="geometry">
+      <rect>
+       <x>410</x>
+       <y>70</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>录入时间点</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="seek_back">
+     <property name="geometry">
+      <rect>
+       <x>210</x>
+       <y>70</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>回退</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="delete_time">
+     <property name="geometry">
+      <rect>
+       <x>610</x>
+       <y>70</y>
+       <width>187</width>
+       <height>57</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>删除时间点</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QTableWidget" name="tableWidget">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>1160</y>
+      <width>2231</width>
+      <height>491</height>
+     </rect>
+    </property>
+    <row>
+     <property name="text">
+      <string>1</string>
+     </property>
+    </row>
+    <column>
+     <property name="text">
+      <string>起始时间</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>终止时间</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>文字</string>
+     </property>
+    </column>
+   </widget>
    <zorder>pic_show</zorder>
-   <zorder>text_edit</zorder>
-   <zorder>file</zorder>
-   <zorder>preview_text</zorder>
+   <zorder>choose_txt</zorder>
+   <zorder>videoPlayer</zorder>
+   <zorder>choose_video</zorder>
+   <zorder>frame</zorder>
+   <zorder>frame_2</zorder>
+   <zorder>tableWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="import_file">
@@ -401,6 +285,23 @@
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>Phonon::VideoPlayer</class>
+   <extends>QWidget</extends>
+   <header location="global">phonon/videoplayer.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Phonon::SeekSlider</class>
+   <extends>QWidget</extends>
+   <header location="global">phonon/seekslider.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Phonon::VolumeSlider</class>
+   <extends>QWidget</extends>
+   <header location="global">phonon/volumeslider.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
