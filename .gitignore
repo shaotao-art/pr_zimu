@@ -1,1 +1,10 @@
 *.png
+*.txt
+*.ttf
+*.mp4
+*.mp3
+*.avi
+/.idea
+*.pyc
+*.doc
+*.docx
