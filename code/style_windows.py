@@ -1,27 +1,38 @@
 import PyQt4.uic
 from PyQt4 import QtGui
-import sys
+from PyQt4.QtGui import QPixmap
+
 
 
 class style_window:
     def __init__(self):
         # 从文件中加载UI定义
         self.ui = PyQt4.uic.loadUi("./../ui/style_window.ui")
+
+        img = QPixmap("./../media/one_frame.png")
+        self.ui.pic_show.setPixmap(img)
+        self.ui.pic_show.setScaledContents(True)
+
+        # 文本框移动函数
         self.ui.to_left.clicked.connect(self.to_left)
         self.ui.to_right.clicked.connect(self.to_right)
         self.ui.to_up.clicked.connect(self.to_up)
         self.ui.to_down.clicked.connect(self.to_down)
+
+        #颜色与字体选择函数
         self.ui.pick_color.clicked.connect(self.pick_color)
         self.ui.pick_font.clicked.connect(self.pick_font)
 
+        #默认样式表
         self.font = {
             'font-family': 'Arial',  # 字体
             'font-style': '',  # 斜体 italic
             'font-weight': '',  # 粗细 blod
-            'font-size': 9,  # 字体大小 9px
+            'font-size': 50,  # 字体大小 9px
             'text-decoration': '',  # 删除线 下划线 line-through underline
-            'color': [0, 0, 0]  # rgb(0,0,0)
+            'color': [255, 255, 255]  # rgb(0,0,0)
         }
+        self.change_style_in_preview_text()
 
     #移动文本框
     def to_left(self):
@@ -99,12 +110,11 @@ class style_window:
                     style_sheet += (str(k) + ':' + f'rgb({v[0]},{v[1]},{v[2]})')
                 else:
                     style_sheet += (str(k) + ':' + str(v) + ';')
-        print(style_sheet)
         self.ui.preview_text.setStyleSheet(style_sheet)
 
 
-# if __name__ =="__main__":
-#     app = QtGui.QApplication([])
-#     main_window = style_window()
-#     main_window.ui.show()
-#     app.exec_()
+if __name__ =="__main__":
+    app = QtGui.QApplication([])
+    main_window = style_window()
+    main_window.ui.show()
+    app.exec_()

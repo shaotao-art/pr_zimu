@@ -13,33 +13,34 @@ def get_video_info(path):
     cap.set(cv2.CAP_PROP_POS_FRAMES, int(frame_nums/2))
     success, img=cap.read()
     cv2.imwrite('./../media/one_frame.png', img)
-    return width, height, frame_nums, framerate,cap
+    return width, height, frame_nums, framerate
 
 
 
 #播放视频时（获得视频路径时）预先将视频和音频分离  取得音频文件
-def get_audio(input_video_path,output_audio_path='./../media/file_audio.mp3'):
+def get_audio(input_video_path,output_audio_path='./../media/origin_audio.mp3'):
     video = VideoFileClip(input_video_path)
-    audio = video.audio()
+    audio = video.audio
     audio.write_audiofile(output_audio_path)
 
 def read_lines(text_path='./../docs/done.txt'):
-    with open(text_path,'r')as text:
-        text.readlines()
-    return text
+    with open(text_path,'r',encoding='utf-8')as text:
+        file=text.readlines()
+    return file
 
 
 #将视频的每一帧进行添加文字的处理，并保存图片
-def put_text_on_each_frame(framerate,width,height,num_data,cap,text,to_bottem):
+def put_text_on_each_frame(framerate,width,height,num_data,text,to_bottem,path):
     '''
     :param framerate: video fps
     :param width: framewidth
     :param height: frameheight
     :param num_data: 输入的带有时间序列的numpy数组   存储的是time in ms
-    :param cap: 读入的视频流
     :param text: 读入的文本
+    :param path: 读入的视频路径
     :return: None
     '''
+    cap=cv2.VideoCapture(path)
     # 创建视频写入对象
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
     # 视频参数

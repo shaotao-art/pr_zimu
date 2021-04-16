@@ -176,9 +176,6 @@
     <property name="text">
      <string/>
     </property>
-    <property name="pixmap">
-     <pixmap>../../python_project/others/2021-02-17.jpg</pixmap>
-    </property>
    </widget>
    <widget class="QLineEdit" name="preview_text">
     <property name="geometry">
