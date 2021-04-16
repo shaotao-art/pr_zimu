@@ -44,11 +44,15 @@ class Stats:
 
         #子窗口展示相关
         self.style_window = style_windows.style_window()
-        self.ui.style_PB.clicked.connect(self.show_style_window)
+        self.ui.style_PB.clicked.connect(self.show_style_window.show)
+        
+        
+        self.stylewimdows.close.connect(self.getstylesheet)
 
-    def show_style_window(self):
-        self.style_window.show()
+    
 
+    def get_stylesheet(self):
+        self.stylesheet=self.style-window.font
     def translate(self):
         #获得分行后的文本
         lines=combine_video.read_lines()
