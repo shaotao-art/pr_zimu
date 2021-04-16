@@ -1,0 +1,37 @@
+1 用户输入文本
+    软件立刻分词 结果存至docs/split_done.txt
+    并显示到表格之中
+
+2 用户输入视频  （此处涉及多线程问题）
+    1 软件将视频中的音频分离出来至media文件夹中 media/origin_audio.mp3
+    2 软件同时将视频加载到视频显示框中
+    3 截取视频的一帧作为选择字幕样式时的背景图片
+
+3 用户点击录入时间点
+    1 将对应的时间点加入到表格中
+    2 同理有删除时间节点
+
+4 用户选择样式  (此处暂时有问题)
+    将对应的样式传入到srt文件
+    将样式传入到opencv puttext函数中
+
+7 用户点击增加英文翻译
+    软件将分行的文本每一句进行翻译 并将结果写入到文本文件中 docs/english_version.txt
+
+6 用户点击生成srt文件
+    软件将 样式
+          文本
+          时间点
+          取出，并格式化生成srt文件
+
+7 用户点击直接输出视频
+    1 软件将视频的每一帧去除并添加文本 生成一段新的无声音的视频（opencv不能提取音频）  media/done_video.avi
+    2 软件将前面步骤中提取的音频与该视频合并   media/final_video.avi
+
+所以类中需要的数据有
+    1 docs/split_done.txt
+    2 docs/english_version.txt
+    3 media/origin_audio.mp3
+    4 media/done_video.avi
+    5 时间点
+    6 样式表
