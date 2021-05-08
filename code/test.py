@@ -1,5 +1,8 @@
-import json
+with open('C:\\Users\starfish\pr_zimu\docs\\3.txt', 'r', encoding='utf-8')as f:
+    text = f.readlines()
+print('我我我')
+print('wowowo')
+for i in range(0, len(text)):
+    print(f'{text[i][0:len(text[i]) - 1]}'.ljust(100), end='')
+    print(1)
 
-a=r'{"translateResult":[[{"tgt":"start","src":"开始"}]],"errorCode":0,"type":"zh-CHS2en","smartResult":{"entries":["","[计] begin\r\n","start\r\n","initiate\r\n"],"type":1}}'
-res=json.loads(a)
-print(res['translateResult'][0][0]['tgt'])

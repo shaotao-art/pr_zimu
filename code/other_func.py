@@ -19,7 +19,7 @@ def split_sentence(path):
     except (SyntaxError, FileNotFoundError, OSError):
         print('路径错误！ 请重新输入正确的路径')
         split_sentence()
-
+split_sentence('./../docs/test.txt')
 # 将选择样式的字幕参数  变成stylesheet样式
 font = {'font-family': 'Arial',
         'font-style': '',

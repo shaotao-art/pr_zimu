@@ -93,9 +93,8 @@ class style_window:
 
     #点击主窗口的PB 来显示该窗口
     def show(self):
-        stats = style_window()
-        stats.ui.show()
-        stats.exec_()
+        self.ui.show()
+
 
 
     # 根据self.font来改变文本框中文本的样式

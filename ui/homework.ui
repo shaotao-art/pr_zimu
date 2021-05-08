@@ -270,6 +270,19 @@
      </property>
     </column>
    </widget>
+   <widget class="QPushButton" name="printnum_data">
+    <property name="geometry">
+     <rect>
+      <x>1750</x>
+      <y>1010</y>
+      <width>291</width>
+      <height>57</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>print_num_data</string>
+    </property>
+   </widget>
    <zorder>pic_show</zorder>
    <zorder>choose_txt</zorder>
    <zorder>videoPlayer</zorder>
@@ -277,6 +290,7 @@
    <zorder>frame</zorder>
    <zorder>frame_2</zorder>
    <zorder>tableWidget</zorder>
+   <zorder>printnum_data</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="import_file">
