@@ -31,7 +31,8 @@ audio_path=['C:\\Users\starfish\pr_zimu\\test_audio\录音-001.wav',
             'C:\\Users\starfish\pr_zimu\\test_audio\录音-005.wav',
             'C:\\Users\starfish\pr_zimu\\test_audio\录音-006.wav',
             'C:\\Users\starfish\pr_zimu\\test_audio\录音-007.wav',
-            'C:\\Users\starfish\pr_zimu\\test_audio\录音-008.wav']
+            'C:\\Users\starfish\pr_zimu\\test_audio\录音-008.wav',
+            'C:\\Users\starfish\pr_zimu\\test_audio\maogai_3.wav']
 text_path=['C:\\Users\starfish\pr_zimu\docs\\1.txt',
            'C:\\Users\starfish\pr_zimu\docs\\2.txt',
            'C:\\Users\starfish\pr_zimu\docs\\3.txt',
@@ -39,9 +40,10 @@ text_path=['C:\\Users\starfish\pr_zimu\docs\\1.txt',
            'C:\\Users\starfish\pr_zimu\docs\\5.txt',
            'C:\\Users\starfish\pr_zimu\docs\\6.txt',
            'C:\\Users\starfish\pr_zimu\docs\\7.txt',
-           'C:\\Users\starfish\pr_zimu\docs\\8.txt']
+           'C:\\Users\starfish\pr_zimu\docs\\8.txt',
+           'C:\\Users\starfish\pr_zimu\docs\\maogai_3.txt']
 
-test_num=5
+test_num=8
 
 class audio_analysis():
     def __init__(self):
@@ -51,7 +53,7 @@ class audio_analysis():
         #判断是否为杂音的阈值
         self.max_fengbei=500
         #判断间隔的阈值
-        self.max_count=3600
+        self.max_count=2400
         #音频基本信息
         #0 nchannels=1,声道数 1 sampwidth=2, 2 framerate=48000,采样率 3 nframes=448320采样数
         self.audio_info=[None]*4
@@ -65,6 +67,10 @@ class audio_analysis():
         self.actual_words_num=0
         self.cal_words_num=0
         self.step_for_slice_move=50  #分割空白区间的重要参数
+
+        self.parm_for_check_chongdie=0.1     #修正两端间隔的重叠
+        self.parm_for_check_jianfeng=0.1     #两段间隔之间的说话长度是否太短
+        self.parm_for_check_blank_len=0.1   #判断间隔的长度是否过短
 
         self.cal_each_sentence_len=[]
 
@@ -207,22 +213,27 @@ class audio_analysis():
 
     def check_start_end_lst(self):
         del_lst=[]
-        #解决间隔重叠的情况
+        #解决间隔重叠的情况  （重叠取大区间）
         for i in range(1,len(self.start_lst)):
-            if self.start_lst[i]-self.start_lst[i-1]<0.25:
+            if self.start_lst[i]-self.start_lst[i-1]<self.parm_for_check_chongdie:
                 del_lst.append(i)
 
 
         for each in del_lst:
             index = del_lst.index(each)
-            del self.start_lst[each-index]
-            del self.end_lst[each-index]
+            if self.end_lst[each-index]-self.start_lst[each-index]>self.end_lst[each-index-1]-self.start_lst[each-index-1]:
+                del self.start_lst[each-index-1]
+                del self.end_lst[each-index-1]
+            else:
+                del self.start_lst[each - index]
+                del self.end_lst[each - index]
+
 
         del_lst.clear()
 
         #解决小尖峰情况
         for i in range(1,len(self.start_lst)):
-            if self.start_lst[i]-self.end_lst[i-1]<0.25:
+            if self.start_lst[i]-self.end_lst[i-1]<self.parm_for_check_jianfeng:
                 del_lst.append(i)
 
         for each in del_lst:
@@ -231,9 +242,9 @@ class audio_analysis():
             del self.end_lst[each -index- 1]
         del_lst.clear()
 
-        #解决每对start end的可能出现的问题
+        #解决每对start end的可能出现的问题  (间隔长度)
         for i in range(0,len(self.start_lst)):
-            if self.end_lst[i]-self.start_lst[i]<0.1:
+            if self.end_lst[i]-self.start_lst[i]<self.parm_for_check_blank_len:
                 del_lst.append(i)
 
         for each in del_lst:
@@ -254,8 +265,8 @@ test.count_words()
 #计算每段语音说的字的长度
 test.caulate_words()
 test.print_info()
-test.plot_zero_audio(test._data)
 
+test.plot_zero_audio(test._data)
 
 
 
@@ -311,4 +322,10 @@ test.plot_zero_audio(test._data)
 让我能好好地睡个觉                    8                   3.9705810327657427
                                                  1.9707442900755878
                                                    4.975886895335735       
+'''
+
+'''
+[0.0020833333333333333, 1.91875, 4.640625, 6.344791666666667, 7.734375, 10.259375, 10.371875, 12.644791666666666, 14.725, 16.894791666666666, 19.380208333333332, 21.188541666666666, 22.955208333333335, 24.2, 24.203125, 25.848958333333332, 28.534375, 29.775, 31.390625, 33.354166666666664, 35.125, 36.405208333333334, 38.378125, 39.99791666666667, 40.86145833333333, 42.603125, 44.946875, 46.541666666666664, 48.7, 51.73854166666667, 52.78541666666667, 53.70729166666667]
+[1.4354166666666666, 2.597916666666667, 5.034375, 6.586458333333334, 8.832291666666666, 10.355208333333334, 11.036458333333334, 12.971875, 15.483333333333333, 17.532291666666666, 19.965625, 22.051041666666666, 23.182291666666668, 24.910416666666666, 24.992708333333333, 26.563541666666666, 28.823958333333334, 30.3125, 32.192708333333336, 33.94166666666667, 35.28541666666667, 37.459375, 38.717708333333334, 40.21458333333333, 41.82604166666667, 43.79270833333333, 45.157291666666666, 47.37708333333333, 49.09791666666667, 52.771875, 53.71458333333333, 54.67604166666667]
+
 '''
