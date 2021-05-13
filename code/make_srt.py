@@ -7,7 +7,12 @@ def modify_to_s(time_in_ms):
     ms= int(time_in_ms % 1000)
     res=f'{hour}:{minute}:{second},{ms}'
     return res
-
+def modify_to_s_in_auto(time_lst):
+    for i in range(0,len(time_lst[0])):
+        time_lst[0][i]=modify_to_s(int(time_lst[0][i]*1000))
+    for i in range(0,len(time_lst[1])):
+        time_lst[1][i]=modify_to_s(int(time_lst[1][i]*1000))
+    return time_lst
 '''
 <b>字幕</b>
 {\\fn字体名称}
@@ -40,14 +45,20 @@ def make_srt(num_data,text_path):
     #读取文本文件获取长度
     with open(text_path,'r',encoding='utf-8')as f:
         file=f.readlines()
-    length=len(file)
-    #字符串格式化生成文件
-    path='a.srt'
-    with open(path,'w',encoding='utf-8')as f2:
-        for i in range(length):
-            f2.write(str(i+1))
-            f2.write('\n')
-            f2.write(str(modify_to_s(num_data[i][0]))+' --> '+str(modify_to_s(num_data[i][1]))+'\n')
-            f2.write(file[i])
-            f2.write('\n')
+    if len(num_data[0])==len(file):
+        length=len(file)
+        #字符串格式化生成文件
+        path='a.srt'
+        with open(path,'w',encoding='utf-8')as f2:
+            for i in range(length):
+                f2.write(str(i+1))
+                f2.write('\n')
+                f2.write(str(num_data[0][i])+' --> '+str(num_data[1][i])+'\n')
+                f2.write(file[i])
+                f2.write('\n')
+        return 1
+    else:
+        print('length of num_data and text does not match')
+        print(len(num_data[0]),len(file))
+        return 0
 

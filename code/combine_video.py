@@ -68,7 +68,7 @@ def get_audio(input_video_path,output_audio_path='./../media/file_audio.mp3'):
     audio = video.audio
     audio.write_audiofile(output_audio_path)
 
-def read_lines(text_path='./../docs/done.txt'):
+def read_lines(text_path):
     with open(text_path,'r',encoding='utf-8')as text:
         file=text.readlines()
     return file
@@ -180,4 +180,4 @@ def combine_audio_video(output_path,audio_path='./../media/file_audio.mp3',video
 #                        )
 #
 # combine_audio_video(output_path='a.mp4')
-get_audio(input_video_path='./../media/test_video.mp4')
+# get_audio(input_video_path='./../media/test_video.mp4')

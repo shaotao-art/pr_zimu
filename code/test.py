@@ -1,8 +1,26 @@
-with open('C:\\Users\starfish\pr_zimu\docs\\3.txt', 'r', encoding='utf-8')as f:
-    text = f.readlines()
-print('我我我')
-print('wowowo')
-for i in range(0, len(text)):
-    print(f'{text[i][0:len(text[i]) - 1]}'.ljust(100), end='')
-    print(1)
+class B:
+    def __init__(self,msg):
+        msg['a']='b'
+class A:
+    def __init__(self):
+        self.num_in_A=dict()
+        b=B(self.num_in_A)
+        print(self.num_in_A)
+a=A()
+'''
+A类中生成B类
+现在 我要在B类中改A类的值
+
+'''
+a=[1,2,3,4]
+b=[1,2,3,4]
+
+print(a,b)
+start=1
+acc=3
+for i in range(0,acc-1):
+    a.insert(start+1+i,' ')
+    b.insert(start  + i, ' ')
+
+print(a,b)
 

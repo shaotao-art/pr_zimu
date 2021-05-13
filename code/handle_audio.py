@@ -1,6 +1,7 @@
 import wave
 import matplotlib.pyplot as plt
 import numpy as np
+import match
 '''
 类接口
 a）测试要调的参数
@@ -43,13 +44,13 @@ text_path=['C:\\Users\starfish\pr_zimu\docs\\1.txt',
            'C:\\Users\starfish\pr_zimu\docs\\8.txt',
            'C:\\Users\starfish\pr_zimu\docs\\maogai_3.txt']
 
-test_num=8
 
+#[1, 2, 48000, 3114240]  [2, 2, 48000, 1881600]
 class audio_analysis():
-    def __init__(self):
+    def __init__(self,audio_path,text_path):
         # 文件路径
-        self.path=audio_path[test_num]
-        self.text=text_path[test_num]
+        self.path=audio_path
+        self.text=text_path
         #判断是否为杂音的阈值
         self.max_fengbei=500
         #判断间隔的阈值
@@ -72,9 +73,18 @@ class audio_analysis():
         self.parm_for_check_jianfeng=0.1     #两段间隔之间的说话长度是否太短
         self.parm_for_check_blank_len=0.1   #判断间隔的长度是否过短
 
+        # 根据语音计算出的每段的长度（可能有一句实际的话对应多个计算的话的情况）
         self.cal_each_sentence_len=[]
-
+        #实际上每句话的长度
         self.actual_each_sentence_len=[]
+
+        #计算出的一句实际的话对应计算出的话列表中元素的个数
+        self.match_len_lst=[]
+
+        #存储最终计算出的时间点的列表
+        self.start_time_point_lst=[]
+        self.end_time_point_lst = []
+
 
 
     def get_data(self):
@@ -85,7 +95,22 @@ class audio_analysis():
         # 读取音频的每一帧
         data = f.readframes(self.audio_info[3])
         # 使用np生成数据矩阵
-        self._data = np.fromstring(data, dtype=np.int16)
+
+
+
+        if self.audio_info[0]==2:
+            self._data=np.fromstring(data,dtype=np.int16)[0:self.audio_info[3]*2:2]
+            self._data1 = np.fromstring(data, dtype=np.int16)[1: self.audio_info[3] * 2:2]
+            self._data=(self._data+self._data1)/2
+        elif self.audio_info[0]==1:
+            self._data = np.fromstring(data, dtype=np.int16)
+        else:
+            print('mind the nchannels')
+
+
+
+
+
 
 
     #make_start_end_lst的内部函数
@@ -126,13 +151,7 @@ class audio_analysis():
 
 
 
-    def plot(self):
-        times = np.arange(0, self.audio_info[3],dtype=np.float32)
 
-        times=times/self.audio_info[2]
-
-        plt.plot(times,self._data)
-        plt.show()
 
 
     def plot_zero_audio(self,_data):
@@ -154,6 +173,8 @@ class audio_analysis():
     def print_info(self):
         print('*******************************************************************')
         print(f'lst_len:  {len(self.start_lst)}  ')
+        print(self.start_lst)
+        print(self.end_lst)
         for i in range(0,len(self.start_lst)):
             print(f'start {self.start_lst[i]}  '.ljust(40),end='')
             print(f' end  {self.end_lst[i]}    '.ljust(40),end='')
@@ -192,23 +213,19 @@ class audio_analysis():
             self.cal_each_sentence_len.append(temp)
             self.cal_words_num+=temp
 
-    def dui_ying_wenben(self):
-        #计算某一段说话时间的的时间间隔
-        #计算该段应该说了多少个字
-        #对应到文本
-        #如果该对应的文本太过离谱就直接跳到下一个间隔
-        #找出离对应文本最近的换行符'
-        pass
+
 
     def count_words(self):
         with open(self.text, 'r', encoding='utf-8')as f:
             text = f.readlines()
         total_len = 0
+        #最后一行没有换行符
         for each in text:
             if len(each)!=1:
                 self.actual_each_sentence_len.append(len(each) - 1)
                 total_len += len(each) - 1
-        self.actual_words_num=total_len
+        self.actual_each_sentence_len[len(text)-1]+=1
+        self.actual_words_num=total_len+1
 
 
     def check_start_end_lst(self):
@@ -251,81 +268,42 @@ class audio_analysis():
             index=del_lst.index(each)
             del self.start_lst[each-index]
             del self.end_lst[each -index]
+    def dui_ying_wenben(self):
+
+        temp_res=match.get_res(actual_lst=self.actual_each_sentence_len,cal_lst=self.cal_each_sentence_len)
+        self.match_len_lst =temp_res[2]
+        res=match.make_time_point(self.actual_each_sentence_len,temp_res[1],self.start_lst,self.end_lst,self.match_len_lst)
+        for i in range(0,len(res[0])):
+            print(res[0][i],res[1][i])
+
+        return res
+
+        #计算某一段说话时间的的时间间隔
+        #计算该段应该说了多少个字
+        #对应到文本
+        #如果该对应的文本太过离谱就直接跳到下一个间隔
+        #找出离对应文本最近的换行符'
+        pass
+    def run(self):
+
+        self.get_data()
+
+        print(self.audio_info)
+
+        self._make_start_end_lst(self._data)
+        #打印start_end_lst
+
+        self.count_words()
+
+        #计算每段语音说的字的长度
+        self.caulate_words()
+        print('self.cal_each_sentence_len',self.cal_each_sentence_len)
+        print('self.actual_each_sentence_len',self.actual_each_sentence_len)
+        # self.plot_zero_audio(self._data)
+        res=self.dui_ying_wenben()
+        return res
+
+test=audio_analysis(audio_path[0],text_path[0])
+test.run()
 
 
-test=audio_analysis()
-test.get_data()
-
-
-test._make_start_end_lst(test._data)
-#打印start_end_lst
-
-test.count_words()
-
-#计算每段语音说的字的长度
-test.caulate_words()
-test.print_info()
-
-test.plot_zero_audio(test._data)
-
-
-
-'''
-在大学作息时间实现的极度自由                        14
-你以为每天能美美的从晚上8点睡到第二天11点             22
-做梦                                             2
-进入大学你就会发现这样一个可悲的事实                  18
-实际上每天睡觉不足五个小时                          13
-甚至彻夜happy                                    6
-在宿舍里                                         4
-每当我盖起被子准备美美的睡一觉时                     16
-床底下传来不断的键盘敲击声                         13
-室友连麦打游戏的叫喊声                             11
-我就不得不塞上耳机                                9
-沉浸在自己的世界里                                9
-终于大家都上床了                                  8
-我摘掉耳机想到终于能好好的睡觉时                    16
-耳边又响起了室友那富有节奏的交响曲                   17
-你高我低                                         4
-你低我高                                         4
-你应我和                                         4
-就这样                                          3
-我从第一个上床的人                                9
-变成了最后一个睡着的人                            11
-我彻底崩溃了                                     6
-我就想怎么在大学好好的睡一个觉就那么难               18
-'''
-
-
-'''
-每当想到这里                   6                6.440914644789665
-我就痛恨的敲打着自己            10                  8.57866992494327
-你说说你                      4               3.3253971024611646
-为啥睡的那么早                 7                 5.909303543375805
-你就没有其他事情了吗            10                  8.313492756152904
-你就不能再学学习               8                  8.124978181183444
-再打打游戏                    5                6.016128469191834
-再听听音乐                    5                5.613964042590334
-为啥就这么不争气               8                  8.42157444580206
-早早上床睡觉来活遭罪            9                   6.885809041717572
-                                          4.343375807296204
-'''
-
-
-'''
-观看视频的小伙伴                     8                   7.0155910730903
-如果是个女同学                      7                   6.900298760877019
-也许对此并不能感同身受               11                     4.334775439570307
-如果你也恰巧有个喜欢在深夜连麦的室友    18                         6.773153967968918
-请说出你的故事                      7                   3.1947822963773187
-并提出宝贵建议                      7                   14.954598142131815
-让我能好好地睡个觉                    8                   3.9705810327657427
-                                                 1.9707442900755878
-                                                   4.975886895335735       
-'''
-
-'''
-[0.0020833333333333333, 1.91875, 4.640625, 6.344791666666667, 7.734375, 10.259375, 10.371875, 12.644791666666666, 14.725, 16.894791666666666, 19.380208333333332, 21.188541666666666, 22.955208333333335, 24.2, 24.203125, 25.848958333333332, 28.534375, 29.775, 31.390625, 33.354166666666664, 35.125, 36.405208333333334, 38.378125, 39.99791666666667, 40.86145833333333, 42.603125, 44.946875, 46.541666666666664, 48.7, 51.73854166666667, 52.78541666666667, 53.70729166666667]
-[1.4354166666666666, 2.597916666666667, 5.034375, 6.586458333333334, 8.832291666666666, 10.355208333333334, 11.036458333333334, 12.971875, 15.483333333333333, 17.532291666666666, 19.965625, 22.051041666666666, 23.182291666666668, 24.910416666666666, 24.992708333333333, 26.563541666666666, 28.823958333333334, 30.3125, 32.192708333333336, 33.94166666666667, 35.28541666666667, 37.459375, 38.717708333333334, 40.21458333333333, 41.82604166666667, 43.79270833333333, 45.157291666666666, 47.37708333333333, 49.09791666666667, 52.771875, 53.71458333333333, 54.67604166666667]
-
-'''
