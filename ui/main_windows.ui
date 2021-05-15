@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>2363</width>
-    <height>1697</height>
+    <height>1858</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,19 +23,6 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="choose_txt">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>30</y>
-      <width>251</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>导入文本文件</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="pic_show">
     <property name="geometry">
      <rect>
@@ -64,33 +51,20 @@
    <widget class="Phonon::VideoPlayer" name="videoPlayer">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>130</y>
+      <x>80</x>
+      <y>160</y>
       <width>1600</width>
       <height>900</height>
      </rect>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="choose_video">
-    <property name="geometry">
-     <rect>
-      <x>320</x>
-      <y>30</y>
-      <width>251</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>导入视频文件</string>
     </property>
    </widget>
    <widget class="QFrame" name="frame">
     <property name="geometry">
      <rect>
       <x>1700</x>
-      <y>290</y>
-      <width>441</width>
-      <height>531</height>
+      <y>320</y>
+      <width>451</width>
+      <height>611</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -99,79 +73,68 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QPushButton" name="style_PB">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>60</x>
+       <x>50</x>
        <y>40</y>
-       <width>311</width>
-       <height>57</height>
+       <width>371</width>
+       <height>521</height>
       </rect>
      </property>
-     <property name="text">
-      <string>预览字幕文本样式</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="english_PB">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>140</y>
-       <width>331</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>自动添加英文字幕</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="make_srt">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>240</y>
-       <width>311</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>生成.srt字幕文件</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="auto_detect_time_point">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>440</y>
-       <width>311</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>自动定位时间点</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="output_hard_zimu">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>340</y>
-       <width>311</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>将字幕嵌入视频</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QPushButton" name="style_PB">
+        <property name="text">
+         <string>预览字幕文本样式</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QRadioButton" name="eng_radio">
+        <property name="text">
+         <string>添加英文字幕</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="make_srt">
+        <property name="text">
+         <string>生成.srt字幕文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="make_ass">
+        <property name="text">
+         <string>生成.ass字幕文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="output_hard_zimu">
+        <property name="text">
+         <string>将字幕嵌入视频</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="auto_detect_time_point">
+        <property name="text">
+         <string>自动定位时间点</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QFrame" name="frame_2">
     <property name="geometry">
      <rect>
       <x>60</x>
-      <y>1030</y>
+      <y>1050</y>
       <width>1611</width>
-      <height>161</height>
+      <height>191</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -180,97 +143,62 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="Phonon::SeekSlider" name="seekSlider">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
        <x>20</x>
        <y>10</y>
-       <width>1361</width>
-       <height>41</height>
+       <width>1581</width>
+       <height>141</height>
       </rect>
      </property>
-    </widget>
-    <widget class="Phonon::VolumeSlider" name="volumeSlider">
-     <property name="geometry">
-      <rect>
-       <x>1320</x>
-       <y>40</y>
-       <width>231</width>
-       <height>121</height>
-      </rect>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="play_or_pause_PB">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>70</y>
-       <width>187</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>播放/暂停</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="recode_time">
-     <property name="geometry">
-      <rect>
-       <x>330</x>
-       <y>70</y>
-       <width>187</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>录入时间点</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="delete_time">
-     <property name="geometry">
-      <rect>
-       <x>940</x>
-       <y>70</y>
-       <width>187</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>删除时间点</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="recode">
-     <property name="geometry">
-      <rect>
-       <x>620</x>
-       <y>70</y>
-       <width>187</width>
-       <height>57</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>修正时间点</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label">
-     <property name="geometry">
-      <rect>
-       <x>1430</x>
-       <y>20</y>
-       <width>135</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>TextLabel</string>
-     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <item>
+       <widget class="Phonon::SeekSlider" name="seekSlider"/>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="2,2,2,2,2">
+        <item>
+         <widget class="QPushButton" name="play_or_pause_PB">
+          <property name="text">
+           <string>播放/暂停</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="recode_time">
+          <property name="text">
+           <string>录入时间点</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="recode">
+          <property name="text">
+           <string>修正时间点</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="delete_time">
+          <property name="text">
+           <string>删除时间点</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Phonon::VolumeSlider" name="volumeSlider"/>
+        </item>
+       </layout>
+      </item>
+     </layout>
     </widget>
    </widget>
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>1160</y>
+      <x>60</x>
+      <y>1230</y>
       <width>2231</width>
       <height>491</height>
      </rect>
@@ -299,18 +227,61 @@
      </property>
     </column>
    </widget>
-   <widget class="QPushButton" name="printnum_data">
+   <widget class="QFrame" name="frame_3">
     <property name="geometry">
      <rect>
-      <x>1750</x>
-      <y>1010</y>
-      <width>291</width>
-      <height>57</height>
+      <x>90</x>
+      <y>9</y>
+      <width>1331</width>
+      <height>111</height>
      </rect>
     </property>
-    <property name="text">
-     <string>print_num_data</string>
+    <property name="frameShape">
+     <enum>QFrame::StyledPanel</enum>
     </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>10</y>
+       <width>891</width>
+       <height>91</height>
+      </rect>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QPushButton" name="choose_txt">
+        <property name="text">
+         <string>导入文本文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="choose_video">
+        <property name="text">
+         <string>导入视频文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="save">
+        <property name="text">
+         <string>保存成工程文件</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="open_old">
+        <property name="text">
+         <string>打开工程文件</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <zorder>pic_show</zorder>
    <zorder>choose_txt</zorder>
@@ -319,7 +290,9 @@
    <zorder>frame</zorder>
    <zorder>frame_2</zorder>
    <zorder>tableWidget</zorder>
-   <zorder>printnum_data</zorder>
+   <zorder>save</zorder>
+   <zorder>open_old</zorder>
+   <zorder>frame_3</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="import_file">
