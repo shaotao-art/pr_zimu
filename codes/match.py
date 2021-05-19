@@ -4,7 +4,7 @@ act=[[14, 22, 2, 18, 13, 6, 4, 16, 13, 11, 9, 9, 8, 16, 17, 4, 4, 4, 3, 9, 11, 6
      [6, 9, 2, 11, 14, 10, 14, 10, 10, 10, 10, 12, 7, 9, 17, 12, 13, 4, 18, 12],
      [9, 5, 5, 4, 7, 8, 6, 16, 10, 9, 7, 7, 17, 4, 13, 16],
      [3, 8, 6, 7, 9, 15, 15, 7, 9, 5, 14, 11, 12],
-     [2, 26, 9, 17, 7, 17, 10, 4, 9, 6, 6, 6, 18, 8, 21, 22],
+     [2, 26, 9, 17, 7, 17, 10, 4, 9, 6, 6, 6, 12, 5, 8, 4, 13, 20],
      [8, 7, 11, 18, 7, 7, 9]]
 cal=[[3.3536284004753028, 5.5247273836188295, 6.544580796449941, 3.747804872919225, 11.174590155315098, 8.008664836955953, 1.8332334353344557, 5.143064449982645, 12.538565885359162, 7.896042987686267, 5.211888913425258, 5.987728319505343, 4.235832886421221, 6.90747342187452, 8.515463158669549, 14.859827334195604, 11.34352292921965, 8.953437016940564, 8.94092347813283, 6.882446344259034, 9.42895149163486, 8.803274551247691, 7.789677907820436, 8.515463158669549, 4.429792737941286, 4.442306276749018, 4.70509059171161, 2.834316539953967, 7.501866515242337, 9.347613489384514, 4.536157817807095, 2.7154379212803823, 11.82529417331777, 3.4850205579566014],
      [6.545338441890168, 8.6845466155811, 3.5440613026819934, 6.028097062579824, 8.499361430395911, 8.212005108556836, 5.574712643678156, 5.727969348659001, 8.652618135376752, 7.081736909323125, 4.4125159642400975],
@@ -261,19 +261,21 @@ def my_fancy(current_pos,sentence_len,cal_lst):
     match_three=abs(sum(cal_lst[current_pos:current_pos+3])-sentence_len)
     minimum=min(match_three,match_two,match_one)
     if match_one==minimum:
-        return 1
+        return 1,match_one
     elif match_two==minimum:
-        return 2
+        return 2,match_two
     else:
-        return 3
+        return 3,match_three
 def my_fancy_main(cal_lst,act_lst):
     match_len_lst=[]
+    deviation_lst=[]
     current_pos=0
     for each_sentence_len in act_lst:
-        match_len=my_fancy(current_pos,each_sentence_len,cal_lst)
+        match_len,deviation=my_fancy(current_pos,each_sentence_len,cal_lst)
         match_len_lst.append(match_len)
+        deviation_lst.append(deviation)
         current_pos+=match_len
-    return match_len_lst
+    return match_len_lst,deviation_lst
 
 for i in  range(0,8):
     print(my_fancy_main(cal[i],act[i]))
