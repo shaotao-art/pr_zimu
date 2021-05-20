@@ -73,7 +73,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>50</x>
@@ -143,7 +143,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -168,14 +168,14 @@
         <item>
          <widget class="QPushButton" name="recode_time">
           <property name="text">
-           <string>录入时间点</string>
+           <string>按顺序录入时间点</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="recode">
           <property name="text">
-           <string>修正时间点</string>
+           <string>单独录入时间点</string>
           </property>
          </widget>
         </item>
@@ -242,7 +242,7 @@
     <property name="frameShadow">
      <enum>QFrame::Raised</enum>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -283,16 +283,6 @@
      </layout>
     </widget>
    </widget>
-   <zorder>pic_show</zorder>
-   <zorder>choose_txt</zorder>
-   <zorder>videoPlayer</zorder>
-   <zorder>choose_video</zorder>
-   <zorder>frame</zorder>
-   <zorder>frame_2</zorder>
-   <zorder>tableWidget</zorder>
-   <zorder>save</zorder>
-   <zorder>open_old</zorder>
-   <zorder>frame_3</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="import_file">

@@ -70,18 +70,32 @@ def make_time_point(start_lst, end_lst, match_len_lst,devation_lst):
     for each in devation_lst:
         if each>3:
             make_empty_lst.append(devation_lst.index(each))
+
+    for i in range(0,len(start_time_point)):
+        start_time_point[i]=round(start_time_point[i],3)
+        end_time_point[i] = round(end_time_point[i], 3)
     for each in make_empty_lst:
-        start_lst[each]=' '
-        end_lst[each] = ' '
-    end_lst[make_empty_lst[0]-1]=' '
-    start_lst[make_empty_lst[-1] + 1] = ' '
+        start_time_point[each]=' '
+        end_time_point[each] = ' '
+    for i in range(0,len(start_time_point)):
+        if start_time_point[i]==' ':
+            if 0<=i-1<len(start_time_point):
+                end_time_point[i-1]=' '
+            if 0<=i+1<len(start_time_point):
+                start_time_point[i+1]=' '
+
+    # if len(make_empty_lst)!=0:
+    #     end_time_point[make_empty_lst[0]-1]=' '
+    #     start_time_point[make_empty_lst[-1] + 1] = ' '
     return start_time_point, end_time_point
 
 
-test_num=1
-
-match_len_lst,devation_lst=my_fancy_main(cal[test_num],act[test_num])
-print(make_time_point(start_end_lst[test_num],start_end_lst[test_num],match_len_lst,devation_lst))
+# test_num=4
+#
+# match_len_lst,devation_lst=my_fancy_main(cal[test_num],act[test_num])
+# res=make_time_point(start_end_lst[test_num*2],start_end_lst[test_num*2+1],match_len_lst,devation_lst)
+# print(res[0])
+# print(res[1])
 
 
 

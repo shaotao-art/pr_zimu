@@ -25,14 +25,14 @@ def get_video_info(path):
     #截取视频中的一帧作为字幕样式时的显示图片
     cap.set(cv2.CAP_PROP_POS_FRAMES, int(frame_nums/2))
     success, img=cap.read()
-    cv2.imwrite('./../media/one_frame.png', img)
+    cv2.imwrite('./../temp/one_frame.png', img)
 
     return width, height, frame_nums, framerate
 
 
 
 
-def get_audio(input_video_path,output_audio_path='./../temp/audio_extract.mp3'):
+def get_audio(input_video_path,output_audio_path='./../temp/audio_extract.wav'):
     '''
     #分离音频保存到./../media/audio_extract.mp3
     :param input_video_path:  输入视频路径

@@ -32,9 +32,9 @@ class style_window:
         '''
         self.style_dic=style_dic
         self.style_dic['font']=['Arial']
-        self.style_dic['font-size'] =[72]
+        self.style_dic['font-size'] =72
         self.style_dic['text-decoration'] = []
-        self.style_dic['color'] = [255,255,255]
+        self.style_dic['color'] = [255,255,255,None]
         self.change_style_in_preview_text()
 
     # #移动文本框
@@ -65,9 +65,9 @@ class style_window:
         self.style_dic['color'][0]=color.red()
         self.style_dic['color'][1] = color.green()
         self.style_dic['color'][2] = color.blue()
-
         self.change_style_in_preview_text()
-        return color.red(),color.green(),color.blue()   #RGB
+        self.style_dic[3]=color.name()
+        return color.name()
 
 
     def pick_font(self):

@@ -1,15 +1,13 @@
 from PyQt4 import phonon,QtGui
 import PyQt4.uic
 from make_srt import modify_to_s ,make_srt,modify_to_s_in_auto,make_srt_eng
-import numpy as np
 import style_windows
 from other_func import split_sentence,read_lines
 import combine_video
 import translate
 import threading
-from PyQt4.QtGui import *
 import make_ass
-# import handle_audio
+import handle_audio
 
 class Stats:
     def __init__(self):
@@ -92,19 +90,19 @@ class Stats:
 
     def open_proj(self):
         #在界面显示信息
-        proj_path = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../temp')
+        proj_path = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../projs')
         with open(proj_path, 'r', encoding='utf-8')as f:
             text=str(f.read())
-        lst=text.split(' ')
+        lst=text.split('*')
         self.video_path=lst[0]
         self.text_path = lst[1]
         self.after_select_text()
         self.after_select_video()
         #在表格中设置数据
-        for i in range(2,int((len(text)-4)/2)):
-            row=(i-2)/2
-            col=(i-2)%2
-            self.ui.tableWidget.setItem(row, col, QtGui.QTableWidgetItem(str(lst[i])))
+        for i in range(0,int((len(lst)-2)/2)):
+            row=i/2
+            col=i%2
+            self.ui.tableWidget.setItem(row, col, QtGui.QTableWidgetItem(str(lst[i+2])))
         #获取表格中的内容来填充time_point_lst
         for i in range(0, self.ui.tableWidget.rowCount()):
             self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
@@ -113,15 +111,22 @@ class Stats:
 
 
     def save(self):
-        # 获取表格中的内容来填充time_point_lst
-        for i in range(0, self.ui.tableWidget.rowCount()):
-            self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
-            self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
-        #将当前信息写入
-        with open('./../temp/current_states.zimu', 'w', encoding='utf-8')as f:
-            f.write(self.video_path + ' ' + self.text_path + ' ')
-            for i in range(0, len(self.time_lst[0])):
-                f.write(self.time_lst[0][i] + ' ' + self.time_lst[1][i] + ' ')
+        save_path = QtGui.QFileDialog.getSaveFileName(self.ui, 'save file', './../projs', '.zimu')
+        if save_path!='':
+            # 获取表格中的内容来填充time_point_lst
+            for i in range(0, self.ui.tableWidget.rowCount()):
+                self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
+                self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
+            #将当前信息写入
+            with open(save_path, 'w', encoding='utf-8')as f:
+                f.write(self.video_path + '*' + self.text_path + '*')
+                for i in range(0, len(self.time_lst[0])):
+                    f.write(self.time_lst[0][i] + '*' + self.time_lst[1][i] + '*')
+            QtGui.QMessageBox.information(
+                self.ui,
+                '提示',
+                '工程文件保存成功！',
+            )
 
 
 
@@ -165,9 +170,8 @@ class Stats:
             # 设置表格数据
 
             self.ui.tableWidget.setItem(row, col, QtGui.QTableWidgetItem(time))
-
         else:
-            QMessageBox.warning(
+            QtGui.QMessageBox.warning(
                 self.ui,
                 'window',
                 '请导入视频')
@@ -183,8 +187,7 @@ class Stats:
         #应检查是否为空  能否继续删除
         if self.current_position_in_table>=0:
             self.current_position_in_table-=1
-        else:
-            pass
+
 
 
 
@@ -201,7 +204,7 @@ class Stats:
     #将文本文件显示在表格中
     def select_text(self):
         #用户选择文本文件
-        self.text_path= QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../docs')
+        self.text_path= QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_docs')
         self.after_select_text()
 
     def after_select_text(self):
@@ -209,7 +212,7 @@ class Stats:
         split_sentence(self.text_path)
 
         #读取分行后的文件
-        content=read_lines('./../docs/split_done.txt')
+        content=read_lines('./../temp/split_done.txt')
 
 
         rows = len(content)
@@ -221,7 +224,7 @@ class Stats:
         # 给每个单元格设置QTableWidgetItem
         for i in range(0,rows):
             for j in range(0,2):
-                self.ui.tableWidget.setItem(i, j, QTableWidgetItem(''))
+                self.ui.tableWidget.setItem(i, j, QtGui.QTableWidgetItem(''))
 
         #在表格中显示文本
         for i in range(0,rows):
@@ -230,7 +233,7 @@ class Stats:
 
     #视频选择
     def select_video(self):
-        video_filepath = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../media')
+        video_filepath = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_video')
         self.video_path=video_filepath
         self.after_select_video()
 
@@ -240,10 +243,13 @@ class Stats:
         self.play_video(self.video_path)
         self.video_info=combine_video.get_video_info(self.video_path)
 
+
+        self.audio_path = './../temp/audio_extract.wav'
         #分离音频
         #创建新线程
         thread_audio=threading.Thread(target=combine_video.get_audio,
                                       args=(self.video_path,))
+
 
         #开始新线程
         thread_audio.start()
@@ -262,12 +268,12 @@ class Stats:
 
     #生成.srt文件
     def convert_to_srt(self):
-        choice = QMessageBox.question(
+        choice = QtGui.QMessageBox.question(
             self.ui,
             '确认',
             '请检查好文本内容与说话内容一致，时间点合法，否则会出错！！！',
-            'yes',
-            'no'
+            '继续',
+            '取消'
             )
         self.time_lst[0].clear()
         self.time_lst[1].clear()
@@ -283,38 +289,28 @@ class Stats:
                     f.write(self.ui.tableWidget.item(i, 2).text())
 
             if self.ui.eng_radio.isChecked():
+                save_path = QtGui.QFileDialog.getSaveFileName(self.ui, 'save file', './../output','.srt')
                 self.translate()
-                res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt')
+                res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
 
-                if res == 1:
-                    QMessageBox.information(
-                        self.ui,
-                        '提示',
-                        '字幕生成成功',
-                    )
-                if res == 0:
-                    QMessageBox.critical(
-                        self.ui,
-                        '错误',
-                        '字幕生成失败',
-                    )
             else:
-                res = make_srt(self.time_lst, './../temp/final_text_in_table.txt')
-                if res == 1:
-                    QMessageBox.information(
-                        self.ui,
-                        '提示',
-                        '字幕生成成功',
-                    )
-                if res == 0:
-                    QMessageBox.critical(
-                        self.ui,
-                        '错误',
-                        '字幕生成失败',
-                    )
+                save_path = QtGui.QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')
+                res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
 
-        if choice == 1:
-            pass
+            #判断结果给出提示信息
+            if res == 1:
+                QtGui.QMessageBox.information(
+                    self.ui,
+                    '提示',
+                    '字幕生成成功',
+                )
+            if res == 0:
+                QtGui.QMessageBox.critical(
+                    self.ui,
+                    '错误',
+                    '字幕生成失败',
+                )
+
 
     def translate(self):
 
@@ -327,7 +323,7 @@ class Stats:
                 if translate.get_res(each) is not None:
                     f.write(translate.get_res(each)+'\n')
                 else:
-                    QMessageBox.critical(
+                    QtGui.QMessageBox.critical(
                         self.ui,
                         '错误',
                         '翻译函数失败',
@@ -335,13 +331,15 @@ class Stats:
 
 
     def make_ass(self):
-        choice = QMessageBox.question(
+
+        choice = QtGui.QMessageBox.question(
             self.ui,
             '确认',
             '请检查好文本内容与说话内容一致，时间点合法，否则会出错！！！',
-            'yes',
-            'no'
+            '继续',
+            '取消'
             )
+
         self.time_lst[0].clear()
         self.time_lst[1].clear()
         if choice==0:
@@ -350,61 +348,63 @@ class Stats:
                 self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
                 self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
 
-            with open('./../docs/final_text_in_table.txt', 'w')as f:
+            with open('./../temp/final_text_in_table.txt', 'w')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
                     f.write(self.ui.tableWidget.item(i, 2).text())
             if self.ui.eng_radio.isChecked():
                 self.translate()
-                res=make_ass.make_ass_eng(self.time_lst, './../docs/final_text_in_table.txt','./../temp/translate_done.txt')
-                if res == 1:
-                    QMessageBox.information(
-                        self.ui,
-                        '提示',
-                        '字幕生成成功',
-                    )
-                if res == 0:
-                    QMessageBox.critical(
-                        self.ui,
-                        '错误',
-                        '字幕生成失败',
-                    )
-            else:
-                res=make_ass.make_ass(self.time_lst, './../docs/final_text_in_table.txt')
-                if res == 1:
-                    QMessageBox.information(
-                        self.ui,
-                        '提示',
-                        '字幕生成成功',
-                    )
-                if res == 0:
-                    QMessageBox.critical(
-                        self.ui,
-                        '错误',
-                        '字幕生成失败',
-                    )
+                save_path = QtGui.QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')
+                res=make_ass.make_ass_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
 
-        else:
-            pass
+            else:
+                print(self.stylesheet)
+                save_path = QtGui.QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')
+                res=make_ass.make_ass(self.time_lst, './../temp/final_text_in_table.txt',self.stylesheet,save_path)
+
+            #判断结果 给出提示
+            if res == 1:
+                QtGui.QMessageBox.information(
+                    self.ui,
+                    '提示',
+                    '字幕生成成功',
+                )
+            if res == 0:
+                QtGui.QMessageBox.critical(
+                    self.ui,
+                    '错误',
+                    '字幕生成失败',
+                )
+
 
 
     def auto_detect_time_point(self):
+        QtGui.QMessageBox.information(
+            self.ui,
+            '提示',
+            '请稍等！',
+        )
         #运行函数
         audio = handle_audio.audio_analysis(audio_path=self.audio_path, text_path=self.text_path)
 
         self.time_lst[0],self.time_lst[1]=audio.run()
 
-
+        #转换成对应的时间格式
         modify_to_s_in_auto(self.time_lst)
-
 
         #将数据写到表格中
         for i in range(0,self.ui.tableWidget.rowCount()):
             self.ui.tableWidget.item(i,0).setText(str(self.time_lst[0][i]))
             self.ui.tableWidget.item(i, 1).setText(str(self.time_lst[1][i]))
 
+        #提示信息
+        QtGui.QMessageBox.information(
+            self.ui,
+            '提示',
+            '部分时间点机器无法匹配，请自行录入时间点！',
+        )
     def make_hard_zimu(self):
         # video_info :width, height, frame_nums, framerate
-        lines=read_lines('./../docs/done.txt')
+        lines=read_lines('../test_docs/done.txt')
         combine_video.put_text_on_each_frame(framerate=self.video_info[3],
                                              frame_num=self.video_info[2],
                                              width=self.video_info[0],
