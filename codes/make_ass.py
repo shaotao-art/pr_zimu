@@ -6,34 +6,33 @@ Bold=''
 Italic=''
 Underline=''
 StrikeOut=''
-infos='''[Script Info]
-;
-Title: 
-Original Script: 
-Original Translation: 
-Original Timing: 
-Original Editing: 
-Script Updated By: 
-Update Details: 
-ScriptType: v4.00+
-Collisions: Normal
-PlayResX: 384
-PlayResY: 288
-Timer: 100.0000
-Synch Point: 
-WrapStyle: 0
-ScaledBorderAndShadow: no
-
-[V4+ Styles]
-Format: Name, Fontname, 50, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
-Style: Default,Arial,18,&H00FFFFFF,&H00E92616,&H00FFFFFF,&H00000000,,,0,0,100,100,0,0,1,2,3,2,20,20,20,134
-
-[Events]
-Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
-'''
+infos="[Script Info]\
+;\
+Title:\
+Original Script:\
+Original Translation:\
+Original Timing:\
+Original Editing:\
+Script Updated By:\
+Update Details:\
+ScriptType: v4.00+\
+Collisions: Normal\
+PlayResX: 384\
+PlayResY: 288\
+Timer: 100.0000\
+Synch Point:\
+WrapStyle: 0\
+ScaledBorderAndShadow: no\
+\
+[V4+ Styles]\
+Format: Name, Fontname, 50, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\
+Style: Default,{Fontname},18,&H00FFFFFF,&H00E92616,&H00FFFFFF,&H00000000,,,0,0,100,100,0,0,1,2,3,2,20,20,20,134\
+\
+[Events]\
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text"
 # PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic,  不是所有样式在迅雷中都能显示
 
-
+print(infos)
 def make_ass(num_data,text_path):
     for i in range(0,len(num_data[0])):
         num_data[0][i]=num_data[0][i].replace(',','.')

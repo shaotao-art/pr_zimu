@@ -10,9 +10,11 @@ def modify_to_s(time_in_ms):
 
 def modify_to_s_in_auto(time_lst):
     for i in range(0,len(time_lst[0])):
-        time_lst[0][i]=modify_to_s(int(time_lst[0][i]*1000))
+        if time_lst[0][i]!=' ':
+            time_lst[0][i]=modify_to_s(int(time_lst[0][i]*1000))
     for i in range(0,len(time_lst[1])):
-        time_lst[1][i]=modify_to_s(int(time_lst[1][i]*1000))
+        if time_lst[1][i]!=' ':
+            time_lst[1][i]=modify_to_s(int(time_lst[1][i]*1000))
     return time_lst
 
 '''

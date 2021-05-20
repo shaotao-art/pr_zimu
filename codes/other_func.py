@@ -21,6 +21,8 @@ def split_sentence(path):
                 else:
                     f.write(each_char)
                     lst.clear()
+        f.write('\n')
+
 
 
 
@@ -37,5 +39,6 @@ def read_lines(text_path):
         with open(text_path,'r',encoding='gbk')as text:
             file=text.readlines()
     return file
+
 
 

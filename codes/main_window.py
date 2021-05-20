@@ -9,7 +9,7 @@ import translate
 import threading
 from PyQt4.QtGui import *
 import make_ass
-# import handle_audio
+import handle_audio
 
 class Stats:
     def __init__(self):
@@ -95,7 +95,7 @@ class Stats:
         proj_path = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../temp')
         with open(proj_path, 'r', encoding='utf-8')as f:
             text=str(f.read())
-        lst=text.split(' ')
+        lst=text.split('*')
         self.video_path=lst[0]
         self.text_path = lst[1]
         self.after_select_text()
@@ -119,9 +119,14 @@ class Stats:
             self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
         #将当前信息写入
         with open('./../temp/current_states.zimu', 'w', encoding='utf-8')as f:
-            f.write(self.video_path + ' ' + self.text_path + ' ')
+            f.write(self.video_path + '*' + self.text_path + '*')
             for i in range(0, len(self.time_lst[0])):
-                f.write(self.time_lst[0][i] + ' ' + self.time_lst[1][i] + ' ')
+                f.write(self.time_lst[0][i] + '*' + self.time_lst[1][i] + '*')
+        QMessageBox.information(
+            self.ui,
+            '提示',
+            '工程文件保存成功！',
+        )
 
 
 
@@ -209,7 +214,7 @@ class Stats:
         split_sentence(self.text_path)
 
         #读取分行后的文件
-        content=read_lines('./../docs/split_done.txt')
+        content=read_lines('./../temp/split_done.txt')
 
 
         rows = len(content)
@@ -230,7 +235,7 @@ class Stats:
 
     #视频选择
     def select_video(self):
-        video_filepath = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../media')
+        video_filepath = QtGui.QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_video')
         self.video_path=video_filepath
         self.after_select_video()
 
@@ -240,10 +245,13 @@ class Stats:
         self.play_video(self.video_path)
         self.video_info=combine_video.get_video_info(self.video_path)
 
+
+        self.audio_path = './../temp/audio_extract.wav'
         #分离音频
         #创建新线程
         thread_audio=threading.Thread(target=combine_video.get_audio,
                                       args=(self.video_path,))
+
 
         #开始新线程
         thread_audio.start()
@@ -388,6 +396,11 @@ class Stats:
 
 
     def auto_detect_time_point(self):
+        QMessageBox.information(
+            self.ui,
+            '提示',
+            '请稍等！',
+        )
         #运行函数
         audio = handle_audio.audio_analysis(audio_path=self.audio_path, text_path=self.text_path)
 
@@ -402,6 +415,11 @@ class Stats:
             self.ui.tableWidget.item(i,0).setText(str(self.time_lst[0][i]))
             self.ui.tableWidget.item(i, 1).setText(str(self.time_lst[1][i]))
 
+        QMessageBox.information(
+            self.ui,
+            '提示',
+            '部分时间点机器无法匹配，请自行录入时间点！',
+        )
     def make_hard_zimu(self):
         # video_info :width, height, frame_nums, framerate
         lines=read_lines('./../docs/done.txt')
