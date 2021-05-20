@@ -331,7 +331,7 @@ class audio_analysis():
 
         self.get_data()
 
-        print(self.audio_info)
+
 
         self.make_start_end_lst(self._data)
         #打印start_end_lst
@@ -340,12 +340,15 @@ class audio_analysis():
 
         #计算每段语音说的字的长度
         self.caulate_words()
-        print('self.cal_each_sentence_len',self.cal_each_sentence_len)
-        print('self.actual_each_sentence_len',self.actual_each_sentence_len)
+        print(self.start_lst)
+        print(self.end_lst)
+
+        # print('self.cal_each_sentence_len',self.cal_each_sentence_len)
+        # print('self.actual_each_sentence_len',self.actual_each_sentence_len)
         # self.plot_zero_audio(self._data)
         # res=self.dui_ying_wenben()
         # return res
-for i in range(4,8):
+for i in range(0,8):
     test=audio_analysis(audio_path[i],text_path[i])
     test.run()
 
