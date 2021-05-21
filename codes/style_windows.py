@@ -1,7 +1,7 @@
 import PyQt5.uic
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
-
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFontDialog,QColorDialog
 
 
 class style_window:
@@ -32,7 +32,7 @@ class style_window:
         '''
         self.style_dic=style_dic
         self.style_dic['font']=['Arial']
-        self.style_dic['font-size'] =72
+        self.style_dic['font-size'] =20
         self.style_dic['text-decoration'] = []
         self.style_dic['color'] = [255,255,255,None]
         self.change_style_in_preview_text()
@@ -61,7 +61,7 @@ class style_window:
 
     #颜色选择
     def pick_color(self):
-        color = QtGui.QColorDialog.getColor()
+        color = QColorDialog.getColor()
         self.style_dic['color'][0]=color.red()
         self.style_dic['color'][1] = color.green()
         self.style_dic['color'][2] = color.blue()
@@ -71,7 +71,7 @@ class style_window:
 
 
     def pick_font(self):
-        font,ok=QtGui.QFontDialog.getFont()
+        font,ok=QFontDialog.getFont()
         self.style_dic['font'].clear()
         #加粗
         if font.bold():
