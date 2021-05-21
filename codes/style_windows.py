@@ -1,13 +1,13 @@
-import PyQt4.uic
-from PyQt4 import QtGui
-from PyQt4.QtGui import QPixmap
+import PyQt5.uic
+from PyQt5 import QtGui
+from PyQt5.QtGui import QPixmap
 
 
 
 class style_window:
     def __init__(self,style_dic):
         # 从文件中加载UI定义
-        self.ui = PyQt4.uic.loadUi("./../ui/style_window.ui")
+        self.ui = PyQt5.uic.loadUi("./../ui/style_window.ui")
 
         img = QPixmap("./../media/one_frame.png")
         self.ui.pic_show.setPixmap(img)

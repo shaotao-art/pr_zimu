@@ -312,13 +312,8 @@ class audio_analysis():
         for i in range(len(self.start_lst)):
             self.duration_lst.append(self.end_lst[i]-self.start_lst[i])
     def dui_ying_wenben(self):
-
-        temp_res=match.get_res(actual_lst=self.actual_each_sentence_len,cal_lst=self.cal_each_sentence_len,duration_lst=self.duration_lst)
-        self.match_len_lst =temp_res[2]
-        res=match.make_time_point(self.actual_each_sentence_len,temp_res[1],self.start_lst,self.end_lst,self.match_len_lst)
-        for i in range(0,len(res[0])):
-            print(res[0][i],res[1][i])
-
+        match_len_lst, devation_lst = match.my_fancy_main(self.cal_each_sentence_len, self.actual_each_sentence_len)
+        res = match.make_time_point(self.start_lst, self.end_lst, match_len_lst, devation_lst)
         return res
 
         #计算某一段说话时间的的时间间隔
@@ -340,17 +335,13 @@ class audio_analysis():
 
         #计算每段语音说的字的长度
         self.caulate_words()
-        print(self.start_lst)
-        print(self.end_lst)
+
 
         # print('self.cal_each_sentence_len',self.cal_each_sentence_len)
         # print('self.actual_each_sentence_len',self.actual_each_sentence_len)
         # self.plot_zero_audio(self._data)
-        # res=self.dui_ying_wenben()
-        # return res
-for i in range(0,8):
-    test=audio_analysis(audio_path[i],text_path[i])
-    test.run()
+        res=self.dui_ying_wenben()
+        return res
 
 '''
 001

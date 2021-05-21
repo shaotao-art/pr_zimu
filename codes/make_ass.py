@@ -67,32 +67,9 @@ def convert_style_dic(style_dic):
 
 
 
-#生成中文的
-def make_ass(num_data,text_path,style_dic,save_path,flag):
-    Fontname, Fontsize, Color, Bold, Italic, Underline, StrikeOut=convert_style_dic(style_dic)
-    for i in range(0,len(num_data[0])):
-        num_data[0][i]=num_data[0][i].replace(',','.')
-        num_data[1][i]=num_data[1][i].replace(',', '.')
-    with open(text_path, 'r')as f:
-        text=f.readlines()
-    try:
-        with open(save_path,'w',encoding='utf-8')as f:
-            f.write(infos1)
-            f.write(f'Style: Default,{Fontname},{Fontsize},{Color},&H00E92616,&H00FFFFFF,&H00000000,{Bold},{Italic},{Underline},{StrikeOut},100,100,0,0,1,2,3,2,20,20,20,134'+'\n')
-            f.write(infos2)
-            if flag==0:
-                for i in range(0,len(text)):
-                    temp=''
-                    temp+=f'Dialogue: 0,{str(num_data[0][i])},{num_data[1][i]},*Default,,0000,0000,0000,,{text[i][0:len(text[i])-1]}'+r'\N'
-                    print(temp)
-                    f.write(temp+'\n')
-            if flag==1:
-        return 1
-    except:
-        return 0
 
 
-def _make_ass(num_data,text_path,style_dic,save_path):
+def make_ass(num_data,text_path,style_dic,save_path):
     Fontname, Fontsize, Color, Bold, Italic, Underline, StrikeOut=convert_style_dic(style_dic)
     for i in range(0,len(num_data[0])):
         num_data[0][i]=num_data[0][i].replace(',','.')
