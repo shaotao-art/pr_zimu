@@ -31,8 +31,8 @@ class style_window:
 
         '''
         self.style_dic=style_dic
-        self.style_dic['font']=['Arial']
-        self.style_dic['font-size'] =20
+        self.style_dic['font']=['"Arial"']
+        self.style_dic['font-size'] =72
         self.style_dic['text-decoration'] = []
         self.style_dic['color'] = [255,255,255,None]
         self.change_style_in_preview_text()

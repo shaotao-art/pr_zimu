@@ -34,8 +34,8 @@ class Stats:
         self.player.setVideoOutput(self.ui.videoPlayer)
 
         #设置显示文本表格的高和宽
-        self.ui.tableWidget.setColumnWidth(0, 100)
-        self.ui.tableWidget.setColumnWidth(1, 100)
+        self.ui.tableWidget.setColumnWidth(0, 200)
+        self.ui.tableWidget.setColumnWidth(1, 200)
         self.ui.tableWidget.horizontalHeader().setStretchLastSection(True)
 
         self.ui.tableWidget.verticalHeader().setDefaultSectionSize(20)
@@ -120,9 +120,10 @@ class Stats:
 
     def open_proj(self):
         #在界面显示信息
-        proj_path = QFileDialog.getOpenFileName(self.ui, 'Open file', './../projs')
-        with open(proj_path[0], 'r', encoding='utf-8')as f:
-            text=str(f.read())
+        proj_path = QFileDialog.getOpenFileName(self.ui, 'Open file', './../projs')[0]
+        if proj_path!='':
+            with open(proj_path, 'r', encoding='utf-8')as f:
+                text=str(f.read())
         lst=text.split('*')
         self.video_path=lst[0]
         self.text_path = lst[1]
@@ -141,14 +142,14 @@ class Stats:
 
 
     def save(self):
-        save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../projs', '.zimu')
+        save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../projs', '.zimu')[0]
         if save_path!='':
             # 获取表格中的内容来填充time_point_lst
             for i in range(0, self.ui.tableWidget.rowCount()):
                 self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
                 self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
             #将当前信息写入
-            with open(save_path[0], 'w', encoding='utf-8')as f:
+            with open(save_path+'.zimu', 'w', encoding='utf-8')as f:
                 f.write(self.video_path + '*' + self.text_path + '*')
                 for i in range(0, len(self.time_lst[0])):
                     f.write(self.time_lst[0][i] + '*' + self.time_lst[1][i] + '*')
@@ -293,6 +294,7 @@ class Stats:
 
     #生成.srt文件
     def make_srt(self):
+        flag = 0
         choice = QMessageBox.question(
             self.ui,
             '确认',
@@ -300,43 +302,45 @@ class Stats:
             QMessageBox.Yes|QMessageBox.No,
             QMessageBox.No
             )
-        self.time_lst[0].clear()
-        self.time_lst[1].clear()
+
 
         if choice == QMessageBox.Yes:
+            self.time_lst[0].clear()
+            self.time_lst[1].clear()
             # 获取表格中的内容来填充time_point_lst
             for i in range(0, self.ui.tableWidget.rowCount()):
                 self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
                 self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
 
-            with open('./../temp/final_text_in_table.txt', 'w')as f:
+            with open('./../temp/final_text_in_table.txt', 'w',encoding='utf-8')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
                     f.write(self.ui.tableWidget.item(i, 2).text())
 
             if self.ui.eng_radio.isChecked():
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output','.srt')[0]
-                if save_path:
+                if save_path!='':
                     self.translate()
                     res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
-
+                    flag = 1
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
-                if save_path:
+                if save_path!='':
                     res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
-
-            #判断结果给出提示信息
-            if res == 1:
-                QMessageBox.information(
-                    self.ui,
-                    '提示',
-                    '字幕生成成功',
-                )
-            if res == 0:
-                QMessageBox.critical(
-                    self.ui,
-                    '错误',
-                    '字幕生成失败',
-                )
+                    flag = 1
+            if flag==1:
+                #判断结果给出提示信息
+                if res == 1:
+                    QMessageBox.information(
+                        self.ui,
+                        '提示',
+                        '字幕生成成功',
+                    )
+                if res == 0:
+                    QMessageBox.critical(
+                        self.ui,
+                        '错误',
+                        '字幕生成失败',
+                    )
 
 
     def translate(self):
@@ -375,11 +379,10 @@ class Stats:
                 self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
                 self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
 
-            with open('./../temp/final_text_in_table.txt', 'w')as f:
+            with open('./../temp/final_text_in_table.txt', 'w',encoding='utf-8')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
                     f.write(self.ui.tableWidget.item(i, 2).text())
             if self.ui.eng_radio.isChecked():
-
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
                 print(save_path)
                 if save_path!='':
@@ -388,7 +391,7 @@ class Stats:
                     res=make_ass.make_ass_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',self.stylesheet,save_path)
 
             else:
-                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
+                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
                 if save_path!='':
                     flag=1
                     res=make_ass.make_ass(self.time_lst, './../temp/final_text_in_table.txt',self.stylesheet,save_path)

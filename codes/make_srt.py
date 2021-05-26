@@ -39,13 +39,13 @@ We could become partners.
 #通过表格中文字生成srt文件
 def make_srt(num_data,text_path,save_path):
     #读取文本文件获取长度
-    with open(text_path,'r')as f:
+    with open(text_path,'r',encoding='utf-8')as f:
         file=f.readlines()
     if len(num_data[0])==len(file):
         length=len(file)
         #字符串格式化生成文件
 
-        with open(save_path,'w',encoding='utf-8')as f2:
+        with open(save_path+'.srt','w',encoding='utf-8')as f2:
             for i in range(length):
                 f2.write(str(i+1))
                 f2.write('\n')
@@ -61,14 +61,14 @@ def make_srt(num_data,text_path,save_path):
 #通过表格中文字生成srt文件
 def make_srt_eng(num_data,text_path,eng_text_path,save_path):
     #读取文本文件获取长度
-    with open(text_path,'r')as f:
+    with open(text_path,'r',encoding='utf-8')as f:
         file=f.readlines()
-    with open(eng_text_path,'r')as f:
+    with open(eng_text_path,'r',encoding='utf-8')as f:
         eng_file=f.readlines()
     if len(num_data[0])==len(file):
         length=len(file)
         #字符串格式化生成文件
-        with open(save_path,'w',encoding='utf-8')as f2:
+        with open(save_path+'.srt','w',encoding='utf-8')as f2:
             for i in range(length):
                 f2.write(str(i+1))
                 f2.write('\n')
