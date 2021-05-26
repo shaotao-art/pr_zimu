@@ -36,7 +36,9 @@ class Stats:
         #设置显示文本表格的高和宽
         self.ui.tableWidget.setColumnWidth(0, 100)
         self.ui.tableWidget.setColumnWidth(1, 100)
-        self.ui.tableWidget.setColumnWidth(2, 1000)
+        self.ui.tableWidget.horizontalHeader().setStretchLastSection(True)
+
+        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(20)
         self.ui.tableWidget.setRowCount(20)
         self.ui.tableWidget.setColumnCount(3)
 
@@ -312,13 +314,15 @@ class Stats:
                     f.write(self.ui.tableWidget.item(i, 2).text())
 
             if self.ui.eng_radio.isChecked():
-                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output','.srt')
-                self.translate()
-                res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
+                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output','.srt')[0]
+                if save_path:
+                    self.translate()
+                    res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
 
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
-                res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
+                if save_path:
+                    res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
 
             #判断结果给出提示信息
             if res == 1:
@@ -354,7 +358,7 @@ class Stats:
 
 
     def make_ass(self):
-
+        flag=0
         choice = QMessageBox.question(
             self.ui,
             '确认',
@@ -375,28 +379,34 @@ class Stats:
                 for i in range(0, self.ui.tableWidget.rowCount()):
                     f.write(self.ui.tableWidget.item(i, 2).text())
             if self.ui.eng_radio.isChecked():
-                self.translate()
-                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')
-                res=make_ass.make_ass_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
+
+                save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
+                print(save_path)
+                if save_path!='':
+                    flag=1
+                    self.translate()
+                    res=make_ass.make_ass_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',self.stylesheet,save_path)
 
             else:
-                print(self.stylesheet)
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
-                res=make_ass.make_ass(self.time_lst, './../temp/final_text_in_table.txt',self.stylesheet,save_path)
+                if save_path!='':
+                    flag=1
+                    res=make_ass.make_ass(self.time_lst, './../temp/final_text_in_table.txt',self.stylesheet,save_path)
 
-            #判断结果 给出提示
-            if res == 1:
-                QMessageBox.information(
-                    self.ui,
-                    '提示',
-                    '字幕生成成功',
-                )
-            if res == 0:
-                QMessageBox.critical(
-                    self.ui,
-                    '错误',
-                    '字幕生成失败',
-                )
+            if flag==1:
+                #判断结果 给出提示
+                if res == 1:
+                    QMessageBox.information(
+                        self.ui,
+                        '提示',
+                        '字幕生成成功',
+                    )
+                if res == 0:
+                    QMessageBox.critical(
+                        self.ui,
+                        '错误',
+                        '字幕生成失败',
+                    )
 
 
 
