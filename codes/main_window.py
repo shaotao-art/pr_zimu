@@ -99,45 +99,52 @@ class Stats:
         self.player.durationChanged.connect(self.getDuration)
         self.player.positionChanged.connect(self.getPosition)
         self.ui.sld_duration.sliderMoved.connect(self.updatePosition)
+
+        #标志已经翻译过文本
+        self.have_translated_flag=0
+
+    #视频展示相关
     def getDuration(self, d):
-        '''d Is the total length of video captured( ms)'''
+        '''d 为时间总长( ms)'''
         self.ui.sld_duration.setRange(0, d)
         self.ui.sld_duration.setEnabled(True)
         self.displayTime(d)
-    # Video real-time location acquisition
+
     def getPosition(self, p):
         self.ui.sld_duration.setValue(p)
         self.displayTime(self.ui.sld_duration.maximum()-p)
-    # Show time remaining
+    # 显示剩余时间
     def displayTime(self, ms):
         minutes = int(ms/60000)
         seconds = int((ms-minutes*60000)/1000)
         self.ui.lab_duration.setText('{}:{}'.format(minutes, seconds))
-    # Update video location with progress bar
+    # 更新进度条
     def updatePosition(self, v):
         self.player.setPosition(v)
         self.displayTime(self.ui.sld_duration.maximum()-v)
 
     def open_proj(self):
-        #在界面显示信息
+        #选择工程文件
         proj_path = QFileDialog.getOpenFileName(self.ui, 'Open file', './../projs')[0]
         if proj_path!='':
             with open(proj_path, 'r', encoding='utf-8')as f:
                 text=str(f.read())
-        lst=text.split('*')
-        self.video_path=lst[0]
-        self.text_path = lst[1]
-        self.after_select_text()
-        self.after_select_video()
-        #在表格中设置数据
-        for i in range(0,int((len(lst)-2)/2)):
-            row=i/2
-            col=i%2
-            self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(lst[i+2])))
-        #获取表格中的内容来填充time_point_lst
-        for i in range(0, self.ui.tableWidget.rowCount()):
-            self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
-            self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
+            lst=text.split('*')
+
+            #获取视频信息
+            self.video_path=lst[0]
+            self.text_path = lst[1]
+            self.after_select_text(flag=1)
+            self.after_select_video(flag=1)
+            #在表格中设置数据
+            for i in range(0,int((len(lst)-2)/2)):
+                row=i/2
+                col=i%2
+                self.ui.tableWidget.setItem(row, col, QTableWidgetItem(str(lst[i+2])))
+            #获取表格中的内容来填充time_point_lst
+            for i in range(0, self.ui.tableWidget.rowCount()):
+                self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
+                self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
 
 
 
@@ -162,25 +169,31 @@ class Stats:
 
 
 
-
+    #单独录入时间点
     def recode(self):
-        #获得当前选中的表格
-        row=self.ui.tableWidget.currentRow()
-        col=self.ui.tableWidget.currentColumn()
-        #写入文本
+        if self.video_path != '':
+            #获得当前选中的表格
+            row=self.ui.tableWidget.currentRow()
+            col=self.ui.tableWidget.currentColumn()
+            #写入文本
 
-        # 获得当前时间点
-        point = self.player.position()  # ms单位
+            # 获得当前时间点
+            point = self.player.position()  # ms单位
 
-        # 格式为 f'{hour}:{minute}:{second},{ms}'
-        time = modify_to_s(point)
+            # 格式为 f'{hour}:{minute}:{second},{ms}'
+            time = modify_to_s(point)
 
-        # 设置表格数据
+            # 设置表格数据
 
-        self.ui.tableWidget.setItem(row, col, QTableWidgetItem(time))
+            self.ui.tableWidget.setItem(row, col, QTableWidgetItem(time))
 
+        else:
+            QMessageBox.warning(
+                self.ui,
+                'window',
+                '请导入视频')
 
-
+    #按顺序录入时间点
     def recode_time_point(self):
         #应检查当前是否有视频  没有视频的话 current time总是0
         if self.video_path!='':
@@ -233,11 +246,14 @@ class Stats:
     def select_text(self):
         #用户选择文本文件
         self.text_path= QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_docs')[0]
-        self.after_select_text()
+        if self.text_path!='':
+            self.after_select_text()
 
-    def after_select_text(self):
-        #文本文件分行并存储
-        split_sentence(self.text_path)
+    #flag为0 是第一次打开   为1 是通过打开工程文件打开  所以一些工作不必做
+    def after_select_text(self,flag=0):
+        if flag==0:
+            #文本文件分行并存储
+            split_sentence(self.text_path)
 
         #读取分行后的文件
         content=read_lines('./../temp/split_done.txt')
@@ -245,15 +261,13 @@ class Stats:
 
         rows = len(content)
 
-        #根据文章的长度初始化numpy 数组
-        self.num_data=np.zeros(shape=[rows,2],dtype=np.int64)
+
         self.ui.tableWidget.setRowCount(rows)
 
         # 给每个单元格设置QTableWidgetItem
         for i in range(0,rows):
             for j in range(0,2):
                 self.ui.tableWidget.setItem(i, j, QTableWidgetItem(''))
-
         #在表格中显示文本
         for i in range(0,rows):
             self.ui.tableWidget.setItem(i, 2, QTableWidgetItem(content[i]))
@@ -261,11 +275,11 @@ class Stats:
 
     #视频选择
     def select_video(self):
-        video_filepath = QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_video')
-        self.video_path=video_filepath[0]
-        self.after_select_video()
+        self.video_path = QFileDialog.getOpenFileName(self.ui, 'Open file', './../test_video')[0]
+        if self.video_path!='':
+            self.after_select_video()
 
-    def after_select_video(self):
+    def after_select_video(self,flag=0):
         # 此时会有一个多线程的问题
         # get_audio 应建立一个新线程在后台运行
         self.play_video()
@@ -273,23 +287,22 @@ class Stats:
 
 
         self.audio_path = './../temp/audio_extract.wav'
-        #分离音频
-        #创建新线程
-        thread_audio=threading.Thread(target=combine_video.get_audio,
-                                      args=(self.video_path,))
+        if flag==0:
+            #分离音频
+            #创建新线程
+            thread_audio=threading.Thread(target=combine_video.get_audio,
+                                          args=(self.video_path,))
 
 
-        #开始新线程
-        thread_audio.start()
+            #开始新线程
+            thread_audio.start()
 
 
 
 
     #播放视频
     def play_video(self):
-
         self.player.setMedia(QtMultimedia.QMediaContent(QtCore.QUrl.fromLocalFile(self.video_path)))
-
         self.player.play()
 
     #生成.srt文件
@@ -312,16 +325,20 @@ class Stats:
                 self.time_lst[0].append(self.ui.tableWidget.item(i, 0).text())
                 self.time_lst[1].append(self.ui.tableWidget.item(i, 1).text())
 
+            #存储表格中最后的内容
             with open('./../temp/final_text_in_table.txt', 'w',encoding='utf-8')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
                     f.write(self.ui.tableWidget.item(i, 2).text())
 
+            #是否要英文翻译
             if self.ui.eng_radio.isChecked():
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output','.srt')[0]
                 if save_path!='':
-                    self.translate()
+                    if self.have_translated_flag==0:
+                        self.translate()
                     res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
                     flag = 1
+                    self.have_translated_flag=1
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
                 if save_path!='':
@@ -384,12 +401,12 @@ class Stats:
                     f.write(self.ui.tableWidget.item(i, 2).text())
             if self.ui.eng_radio.isChecked():
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
-                print(save_path)
                 if save_path!='':
                     flag=1
-                    self.translate()
+                    if self.have_translated_flag==0:
+                        self.translate()
                     res=make_ass.make_ass_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',self.stylesheet,save_path)
-
+                    self.have_translated_flag=1
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
                 if save_path!='':

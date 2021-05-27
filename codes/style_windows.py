@@ -1,7 +1,7 @@
 import PyQt5.uic
 from PyQt5 import QtGui
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QFontDialog,QColorDialog
+from PyQt5.QtWidgets import QFontDialog,QColorDialog
 
 
 class style_window:
@@ -9,7 +9,7 @@ class style_window:
         # 从文件中加载UI定义
         self.ui = PyQt5.uic.loadUi("./../ui/style_window.ui")
 
-        img = QPixmap("./../media/one_frame.png")
+        img = QPixmap("./../temp/one_frame.png")
         self.ui.pic_show.setPixmap(img)
         self.ui.pic_show.setScaledContents(True)
 
