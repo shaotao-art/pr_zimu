@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5 import QtGui
 from PyQt5 import QtMultimedia,QtCore
 
-
+import make_hard_zimu
 
 from make_srt import modify_to_s ,make_srt,modify_to_s_in_auto,make_srt_eng
 import style_windows
@@ -63,7 +63,7 @@ class Stats:
         #文本文件路径
         self.text_path=''
 
-
+        self.srt_path=''
 
         #自动确定时间点时手动添加时间点
         self.ui.recode.clicked.connect(self.recode)
@@ -339,10 +339,12 @@ class Stats:
                     res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
                     flag = 1
                     self.have_translated_flag=1
+                    self.srt_path = save_path
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
                 if save_path!='':
                     res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
+                    self.srt_path=save_path
                     flag = 1
             if flag==1:
                 #判断结果给出提示信息
@@ -457,15 +459,13 @@ class Stats:
         )
     def make_hard_zimu(self):
         # video_info :width, height, frame_nums, framerate
-        lines=read_lines('../test_docs/done.txt')
-        combine_video.put_text_on_each_frame(framerate=self.video_info[3],
-                                             frame_num=self.video_info[2],
-                                             width=self.video_info[0],
-                                             height=self.video_info[1],
-                                             num_data=self.num_data,
-                                             text=lines,
-                                             input_video_path=self.video_path)
-        combine_video.combine_audio_video(output_path='./../media/final_video.mp4')
+        make_hard_zimu.RealizeAddSubtitles(self.video_path, self.srt_path)
+        QMessageBox.information(
+            self.ui,
+            '提示',
+            '完成',
+        )
+
 
 
 if __name__ =="__main__":
