@@ -9,9 +9,7 @@ class style_window:
         # 从文件中加载UI定义
         self.ui = PyQt5.uic.loadUi("./../ui/style_window.ui")
 
-        img = QPixmap("./../temp/one_frame.png")
-        self.ui.pic_show.setPixmap(img)
-        self.ui.pic_show.setScaledContents(True)
+
 
         # # 文本框移动函数
         # self.ui.to_left.clicked.connect(self.to_left)
@@ -98,6 +96,9 @@ class style_window:
 
     #点击主窗口的PB 来显示该窗口
     def show(self):
+        img = QPixmap("./../temp/one_frame.png")
+        self.ui.pic_show.setPixmap(img)
+        self.ui.pic_show.setScaledContents(True)
         self.ui.show()
 
 

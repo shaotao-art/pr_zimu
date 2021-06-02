@@ -111,6 +111,8 @@
           <height>1080</height>
          </size>
         </property>
+        <zorder>tableWidget</zorder>
+        <zorder>tableWidget</zorder>
        </widget>
       </item>
       <item>

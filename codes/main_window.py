@@ -1,15 +1,13 @@
-import numpy as np
 from PyQt5 import uic
 from PyQt5.QtWidgets import *
-from PyQt5 import QtGui
 from PyQt5 import QtMultimedia,QtCore
-
+from PyQt5.QtGui import QFont
 import make_hard_zimu
+import style_windows
 
 from make_srt import modify_to_s ,make_srt,modify_to_s_in_auto,make_srt_eng
-import style_windows
 from other_func import split_sentence,read_lines
-import combine_video
+from combine_video import get_video_info,get_audio
 import translate
 import threading
 import make_ass
@@ -20,14 +18,7 @@ class Stats:
         # 从文件中加载UI定义
         self.ui = uic.loadUi("./../ui/main_windows.ui")
 
-        #选择字幕文本文件按钮
-        self.ui.choose_txt.clicked.connect(self.select_text)
 
-        #选择视频按钮
-        self.ui.choose_video.clicked.connect(self.select_video)
-
-        #视频播放按钮
-        self.ui.play_or_pause_PB.clicked.connect(self.paly_or_pause)
 
         #视频组件
         self.player = QtMultimedia.QMediaPlayer(None, QtMultimedia.QMediaPlayer.VideoSurface)
@@ -36,18 +27,12 @@ class Stats:
         #设置显示文本表格的高和宽
         self.ui.tableWidget.setColumnWidth(0, 200)
         self.ui.tableWidget.setColumnWidth(1, 200)
+
         self.ui.tableWidget.horizontalHeader().setStretchLastSection(True)
 
-        self.ui.tableWidget.verticalHeader().setDefaultSectionSize(20)
         self.ui.tableWidget.setRowCount(20)
-        self.ui.tableWidget.setColumnCount(3)
+        self.ui.tableWidget.setFont(QFont("黑体", 9))
 
-        #生成.srt文件
-        self.ui.make_srt.clicked.connect(self.make_srt)
-
-        #添加时间点 与 删除时间点按钮
-        self.ui.recode_time.clicked.connect(self.recode_time_point)
-        self.ui.delete_time.clicked.connect(self.delete_time_point)
 
 
         #添加删除时间点的计数
@@ -76,17 +61,17 @@ class Stats:
         self.ui.style_PB.clicked.connect(self.style_window.show)
 
 
-        # 将字幕文本直接写到字幕的每一帧里去
-        self.ui.output_hard_zimu.clicked.connect(self.make_hard_zimu)
-
-
-        #自动定位时间点
-        self.ui.auto_detect_time_point.clicked.connect(self.auto_detect_time_point)
-
 
         #最终结果 时间点列表
         self.time_lst=[[],[]]
 
+
+        #标志已经翻译过文本
+        self.have_translated_flag=0
+
+        self.make_connect()
+
+    def make_connect(self):
         #保存当前工程
         self.ui.save.clicked.connect(self.save)
 
@@ -99,9 +84,32 @@ class Stats:
         self.player.durationChanged.connect(self.getDuration)
         self.player.positionChanged.connect(self.getPosition)
         self.ui.sld_duration.sliderMoved.connect(self.updatePosition)
+        #生成.srt文件
+        self.ui.make_srt.clicked.connect(self.make_srt)
 
-        #标志已经翻译过文本
-        self.have_translated_flag=0
+        #添加时间点 与 删除时间点按钮
+        self.ui.recode_time.clicked.connect(self.recode_time_point)
+        self.ui.delete_time.clicked.connect(self.delete_time_point)
+
+
+
+
+        # 将字幕文本直接写到字幕的每一帧里去
+        self.ui.output_hard_zimu.clicked.connect(self.make_hard_zimu)
+
+
+        #自动定位时间点
+        self.ui.auto_detect_time_point.clicked.connect(self.auto_detect_time_point)
+
+        # 选择字幕文本文件按钮
+        self.ui.choose_txt.clicked.connect(self.select_text)
+
+        # 选择视频按钮
+        self.ui.choose_video.clicked.connect(self.select_video)
+
+        # 视频播放按钮
+        self.ui.play_or_pause_PB.clicked.connect(self.paly_or_pause)
+
 
     #视频展示相关
     def getDuration(self, d):
@@ -270,7 +278,7 @@ class Stats:
                 self.ui.tableWidget.setItem(i, j, QTableWidgetItem(''))
         #在表格中显示文本
         for i in range(0,rows):
-            self.ui.tableWidget.setItem(i, 2, QTableWidgetItem(content[i]))
+            self.ui.tableWidget.setItem(i, 2, QTableWidgetItem(content[i][:-1]))
 
 
     #视频选择
@@ -283,14 +291,14 @@ class Stats:
         # 此时会有一个多线程的问题
         # get_audio 应建立一个新线程在后台运行
         self.play_video()
-        self.video_info=combine_video.get_video_info(self.video_path)
+        self.video_info=get_video_info(self.video_path)
 
 
         self.audio_path = './../temp/audio_extract.wav'
         if flag==0:
             #分离音频
             #创建新线程
-            thread_audio=threading.Thread(target=combine_video.get_audio,
+            thread_audio=threading.Thread(target=get_audio,
                                           args=(self.video_path,))
 
 
@@ -328,7 +336,7 @@ class Stats:
             #存储表格中最后的内容
             with open('./../temp/final_text_in_table.txt', 'w',encoding='utf-8')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
-                    f.write(self.ui.tableWidget.item(i, 2).text())
+                    f.write(self.ui.tableWidget.item(i, 2).text()+'\n')
 
             #是否要英文翻译
             if self.ui.eng_radio.isChecked():
@@ -339,12 +347,11 @@ class Stats:
                     res = make_srt_eng(self.time_lst, './../temp/final_text_in_table.txt','./../temp/translate_done.txt',save_path)
                     flag = 1
                     self.have_translated_flag=1
-                    self.srt_path = save_path
             else:
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.srt')[0]
                 if save_path!='':
                     res = make_srt(self.time_lst, './../temp/final_text_in_table.txt',save_path)
-                    self.srt_path=save_path
+                    self.srt_path=save_path+'.srt'
                     flag = 1
             if flag==1:
                 #判断结果给出提示信息
@@ -400,7 +407,7 @@ class Stats:
 
             with open('./../temp/final_text_in_table.txt', 'w',encoding='utf-8')as f:
                 for i in range(0, self.ui.tableWidget.rowCount()):
-                    f.write(self.ui.tableWidget.item(i, 2).text())
+                    f.write(self.ui.tableWidget.item(i, 2).text()+'\n')
             if self.ui.eng_radio.isChecked():
                 save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.ass')[0]
                 if save_path!='':
@@ -458,13 +465,27 @@ class Stats:
             '部分时间点机器无法匹配，请自行录入时间点！',
         )
     def make_hard_zimu(self):
-        # video_info :width, height, frame_nums, framerate
-        make_hard_zimu.RealizeAddSubtitles(self.video_path, self.srt_path)
-        QMessageBox.information(
-            self.ui,
-            '提示',
-            '完成',
-        )
+        if self.srt_path!='':
+            save_path = QFileDialog.getSaveFileName(self.ui, 'save file', './../output', '.mp4')[0]+'.mp4'
+            QMessageBox.information(
+                self.ui,
+                '提示',
+                '请等待！',
+            )
+            # video_info :width, height, frame_nums, framerate
+            make_hard_zimu.RealizeAddSubtitles(self.video_path, self.srt_path,save_path)
+            QMessageBox.information(
+                self.ui,
+                '提示',
+                '完成',
+            )
+        else:
+            QMessageBox.information(
+                self.ui,
+                '提示',
+                '请先生成.srt文件！',
+            )
+
 
 
 
